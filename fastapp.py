@@ -22,11 +22,11 @@ app.add_middleware(
 )
 
 # app.mount("/static", StaticFiles(directory="static"), name="static")
-app.mount("/", StaticFiles(directory="static"))
+# app.mount("/", StaticFiles(directory="static"))
 
 @app.get("/")
 async def index():
-    return FileResponse("static/index.html")
+    return FileResponse("/static/index.html")
 
 class TranslationRequest(BaseModel):
     rmlData: str = None
