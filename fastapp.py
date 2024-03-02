@@ -62,19 +62,19 @@ async def translate(request_data: TranslationRequest):
         command = f"python scoop/main.py -ot {output_file}"
 
         mappings = request_data.rmlData
-        if mappings:
+        if len(mappings)>5:
             rdflib.Graph().parse(data=mappings, format="turtle").serialize(
                 destination=rml_file, format="turtle"
             )
             command += f" -m {rml_file} -xr {rml_file}"
 
         ontology = request_data.owlData
-        if ontology:
+        if len(ontology)>5:
             open(owl_file, "w").write(ontology)
             command += f" -o {owl_file}"
 
         xsd = request_data.xsdData
-        if xsd:
+        if len(xsd)>5:
             open(xsd_file, "w").write(xsd)
             command += f" -x {xsd_file}"
 
