@@ -2,5 +2,4 @@ rdflib==7.0.0
 pyshacl==0.25.0
 requests==2.31.0
 Flask==3.0.2
-gunicorn==21.2.0
-uvicorn
+gunicorn==20.1.0
