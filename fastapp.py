@@ -10,6 +10,7 @@ import uvicorn
 from fastapi.responses import FileResponse
 from fastapi import Response
 from fastapi.staticfiles import StaticFiles
+import tempfile
 
 app = FastAPI()
 
@@ -42,17 +43,21 @@ class TranslationRequest(BaseModel):
 async def translate(request_data: TranslationRequest):
 
     try:
-        shutil.rmtree("temp_input")
-        os.mkdir("temp_input")
-        rml_file, owl_file, xsd_file = (
-            "temp_input/rml.ttl",
-            "temp_input/owl.txt",
-            "temp_input/xsd.xml",
-        )
+        # shutil.rmtree("temp_input")
+        # os.mkdir("temp_input")
+        # rml_file, owl_file, xsd_file = "temp_input/rml.ttl","temp_input/owl.txt","temp_input/xsd.xml"
+        
 
-        shutil.rmtree("temp_output")
-        os.mkdir("temp_output")
-        output_file = "temp_output/shacl.ttl"
+        # shutil.rmtree("temp_output")
+        # os.mkdir("temp_output")
+        # output_file = "temp_output/shacl.ttl"
+        temp_input_dir = tempfile.mkdtemp()
+        rml_file = os.path.join(temp_input_dir, "rml.ttl")
+        owl_file = os.path.join(temp_input_dir, "owl.txt")
+        xsd_file = os.path.join(temp_input_dir, "xsd.xml")
+        output_file = os.path.join(temp_output_dir, "shacl.ttl")
+
+        shutil.rmtree(temp_input_dir)
 
         command = f"python scoop/main.py -ot {output_file}"
 
