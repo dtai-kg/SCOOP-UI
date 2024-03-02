@@ -7,12 +7,12 @@
     sh:class transit:Stop ;
     sh:nodeKind sh:IRI ;
     sh:pattern "http://airport.example.com/.*" ;
-    sh:property [ sh:datatype xsd:int ;
+    sh:property [ sh:nodeKind sh:Literal ;
+            sh:path wgs84_pos:lat ],
+        [ sh:datatype xsd:int ;
             sh:nodeKind sh:Literal ;
             sh:path transit:route ],
         [ sh:nodeKind sh:Literal ;
-            sh:path wgs84_pos:long ],
-        [ sh:nodeKind sh:Literal ;
-            sh:path wgs84_pos:lat ] ;
+            sh:path wgs84_pos:long ] ;
     sh:targetClass transit:Stop .
 

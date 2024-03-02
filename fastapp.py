@@ -10,6 +10,14 @@ from fastapi.responses import FileResponse
 
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["https://xuemduan.github.io"],  # 允许的源
+    allow_credentials=True,
+    allow_methods=["GET", "POST"],  # 允许的 HTTP 方法
+    allow_headers=["*"],  # 允许的请求头
+)
+
 @app.get("/")
 async def index():
     return FileResponse("index.html")
