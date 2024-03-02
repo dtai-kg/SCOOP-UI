@@ -9,6 +9,7 @@ import shutil
 import uvicorn
 from fastapi.responses import FileResponse
 from fastapi import Response
+from fastapi.staticfiles import StaticFiles
 
 app = FastAPI()
 
@@ -20,11 +21,12 @@ app.add_middleware(
     allow_headers=["*"], 
 )
 
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/", StaticFiles(directory="static"))
 
 @app.get("/")
 async def index():
-    return FileResponse("index.html", media_type="text/html", templates=True)
+    return FileResponse("index.html")
 
 class TranslationRequest(BaseModel):
     rmlData: str = None
