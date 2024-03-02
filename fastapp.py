@@ -26,7 +26,7 @@ app.add_middleware(
 
 @app.get("/")
 async def index():
-    return FileResponse("/static/index.html")
+    return FileResponse("index.html")
 
 class TranslationRequest(BaseModel):
     rmlData: str = None
