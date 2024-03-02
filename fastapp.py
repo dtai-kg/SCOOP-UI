@@ -18,9 +18,9 @@ app.add_middleware(
     allow_headers=["*"],  # 允许的请求头
 )
 
-@app.get("/")
-async def index():
-    return FileResponse("index.html")
+# @app.get("/")
+# async def index():
+#     return FileResponse("index.html")
 
 class TranslationRequest(BaseModel):
     rmlData: str = None
