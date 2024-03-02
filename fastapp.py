@@ -23,9 +23,9 @@ app.add_middleware(
 
 # app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/static", StaticFiles(directory="static"), name="static")
-app.mount("/assets", StaticFiles(directory="assets"), name="assets")
-app.mount("/examples", StaticFiles(directory="examples"), name="examples")
-app.mount("/images", StaticFiles(directory="images"), name="images")
+app.mount("/assets", StaticFiles(directory="static/assets"), name="assets")
+app.mount("/examples", StaticFiles(directory="static/examples"), name="examples")
+app.mount("/images", StaticFiles(directory="static/images"), name="images")
 
 @app.get("/")
 async def index():
