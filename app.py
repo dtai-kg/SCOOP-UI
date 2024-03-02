@@ -6,22 +6,22 @@ import shutil
 
 app = Flask(__name__)
 
-@app.route('/')
-def index():
-    return render_template('index.html')
+# @app.route('/')
+# def index():
+#     return render_template('index.html')
 
-@app.route('/assets/<path:path>')
-def send_assets(path):
-    return send_from_directory('templates/assets', path)
+# @app.route('/assets/<path:path>')
+# def send_assets(path):
+#     return send_from_directory('templates/assets', path)
 
 
-@app.route('/examples/<path:path>')
-def send_examples(path):
-    return send_from_directory('templates/examples', path)
+# @app.route('/examples/<path:path>')
+# def send_examples(path):
+#     return send_from_directory('templates/examples', path)
 
-@app.route('/images/<path:path>')
-def send_images(path):
-    return send_from_directory('templates/images', path)
+# @app.route('/images/<path:path>')
+# def send_images(path):
+#     return send_from_directory('templates/images', path)
 
 @app.route('/translate', methods=['POST'])
 def translate():
@@ -62,6 +62,6 @@ def translate():
         return jsonify({'error': error_message}), 500
 
 
-if __name__ == '__main__':
-    app.run(debug=True)
-    # app.run(host='0:0:0:0', port=5000, debug=True)
+# if __name__ == '__main__':
+#     app.run(debug=True)
+#     # app.run(host='0:0:0:0', port=5000, debug=True)
