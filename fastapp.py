@@ -32,9 +32,6 @@ class TranslationRequest(BaseModel):
 
 @app.post("/translate")
 async def translate(request_data: TranslationRequest):
-    response = Response()
-    response.headers["Access-Control-Allow-Origin"] = "https://xuemduan.github.io"
-    response.headers["Access-Control-Allow-Credentials"] = "true"
 
     try:
         shutil.rmtree("temp_input")

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SCOOP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .banner {
+            width: 100%;
+            padding: 2px 0;
+            background-color: #6a1b9a; /* Purple color */
+            color: #fff;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .container {
+            width: 90%;
+            max-width: 800px;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        h1 {
+            color: #007bff;
+        }
+        h2 {
+            color: #555;
+        }
+        textarea {
+            width: calc(100% - 22px); /* Adjusted width */
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+        input[type="file"] {
+            margin-top: 5px;
+        }
+        button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #ffc107;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button:hover {
+            background-color: #ffca28;
+        }
+        #shaclOutput {
+            width: calc(100% - 22px); /* Adjusted width */
+            height: 150px;
+            margin-top: 20px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            resize: vertical;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <p>Welcome to SCOOP</p>
+    </div>
+
+    <div class="container">
+        <h1>SCOOP</h1>
+
+        <div style="display: flex; justify-content: space-around;">
+            <div>
+                <h2>Raw data schema</h2>
+                <textarea id="xsdText" rows="5" placeholder="Enter raw data schema here"></textarea>
+                <input type="file" id="xsdTextFile" accept=".txt,.json" onchange="handleFileUpload(this)">
+            </div>
+
+            <div>
+                <h2>RML mapping rules</h2>
+                <textarea id="rmlText" rows="5" placeholder="Enter RML mapping rules here"></textarea>
+                <input type="file" id="rmlTextFile" accept=".ttl" onchange="handleFileUpload(this)">
+            </div>
+
+            <div>
+                <h2>Ontology</h2>
+                <textarea id="owlText" rows="5" placeholder="Enter ontology here"></textarea>
+                <input type="file" id="owlTextFile" accept=".txt,.owl,.ttl" onchange="handleFileUpload(this)">
+            </div>
+        </div>
+
+        <div>
+            <h2>SHACL Output</h2>
+            <textarea id="shaclOutput" rows="5" placeholder="SHACL output will appear here" readonly></textarea>
+        </div>
+
+        <button onclick="translateIt()">Translate to SHACL</button>
+    </div>
+
+    <script>
+        function handleFileUpload(input) {
+            const file = input.files[0];
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const textAreaId = input.id.replace('File', '');
+                document.getElementById(textAreaId).value = e.target.result;
+            }
+            reader.readAsText(file);
+        }
+
+        function translateIt() {    
+            
+
+            var formData = new FormData();
+            formData.append('xsdData', document.getElementById('xsdText').value);       
+            formData.append('rmlData', document.getElementById('rmlText').value);
+            formData.append('owlData', document.getElementById('owlText').value);
+            // var rawDataSchema = document.getElementById('rawDataSchema').value;
+            // var rmlMappingRules = document.getElementById('rmlMappingRules').value;
+            // var ontologyContent = document.getElementById('ontology').value;
+
+            // Send POST request to backend
+            fetch('/translate', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Handle the response from backend
+                console.log('SHACL output:', data);
+                // document.getElementById('shaclOutput').innerText = JSON.stringify(data, null, 2);
+                document.getElementById('shaclOutput').innerText = data.shacl_output;
+                // Update your HTML elements with the SHACL output
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });            
+
+            // var apiUrl = 'https://astrea.linkeddata.es/api/shacl/url';
+            // // var requestBody = {
+            // //     "ontology": ontologyContent,
+            // //     "serialisation": "TURTLE"
+            // // };
+            // var requestBody = {"ontologies": ["https://www.w3.org/2006/time#"]}
+
+  
+            // fetch(apiUrl, {
+            //     // mode: 'no-cors',
+            //     method: 'POST',
+            //     headers: {
+            //         "Access-Control-Allow-Origin": "http://localhost:3000",
+            //         'Content-Type': 'application/json'
+            //     },
+            //     body: JSON.stringify(requestBody)
+            // })
+            // .then(response => response.json())
+            // .then(data => {
+
+            //     document.getElementById('shaclOutput').value = data;
+            // })
+            // .catch(error => {
+            //     console.error('Error:', error);
+            // });
+        }
+     
+    </script>
+</body>
+</html>
