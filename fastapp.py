@@ -53,7 +53,6 @@ async def translate(request_data: TranslationRequest):
         # output_file = "temp_output/shacl.ttl"
 
         
-        os.mkdir("tmp")
         rml_file, owl_file, xsd_file, output_file= "tmp/rml.ttl","tmp/owl.txt","tmp/xsd.xml", "tmp/shacl.ttl"
         
         # temp_dir = tempfile.mkdtemp()
@@ -93,7 +92,6 @@ async def translate(request_data: TranslationRequest):
             format="turtle"
         )
 
-        shutil.rmtree("tmp")
 
         if result.returncode == 0:
             shacl_output = result.stdout
