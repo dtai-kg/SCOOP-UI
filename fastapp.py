@@ -22,7 +22,7 @@ app.add_middleware(
 
 @app.get("/")
 async def index():
-    return FileResponse("index.html")
+    return FileResponse("index.html", media_type="text/html", templates=True)
 
 class TranslationRequest(BaseModel):
     rmlData: str = None
