@@ -51,13 +51,13 @@ async def translate(request_data: TranslationRequest):
         # shutil.rmtree("temp_output")
         # os.mkdir("temp_output")
         # output_file = "temp_output/shacl.ttl"
-        temp_input_dir = tempfile.mkdtemp()
-        rml_file = os.path.join(temp_input_dir, "rml.ttl")
-        owl_file = os.path.join(temp_input_dir, "owl.txt")
-        xsd_file = os.path.join(temp_input_dir, "xsd.xml")
-        output_file = os.path.join(temp_output_dir, "shacl.ttl")
+        temp_dir = tempfile.mkdtemp()
+        rml_file = os.path.join(temp_dir, "rml.ttl")
+        owl_file = os.path.join(temp_dir, "owl.txt")
+        xsd_file = os.path.join(temp_dir, "xsd.xml")
+        output_file = os.path.join(temp_dir, "shacl.ttl")
 
-        shutil.rmtree(temp_input_dir)
+        shutil.rmtree(temp_dir)
 
         command = f"python scoop/main.py -ot {output_file}"
 
