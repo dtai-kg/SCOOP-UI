@@ -26,7 +26,7 @@ app.mount("/", StaticFiles(directory="static"))
 
 @app.get("/")
 async def index():
-    return FileResponse("index.html")
+    return FileResponse("static/index.html")
 
 class TranslationRequest(BaseModel):
     rmlData: str = None
