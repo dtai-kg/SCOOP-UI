@@ -98,7 +98,7 @@ function translateIt() {
     };
 
 
-    fetch('https://good-gray-caterpillar-robe.cyclic.app/translate', { 
+    fetch('/translate', { 
         method: 'POST',
         headers: {
             'Content-Type': 'application/json' 
