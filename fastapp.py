@@ -8,15 +8,16 @@ import os
 import shutil
 import uvicorn
 from fastapi.responses import FileResponse
+from fastapi import Response
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://xuemduan.github.io"],  
+    allow_origins=["*"],  
     allow_credentials=True,
-    allow_methods=["GET", "POST"], 
-    allow_headers=["*"],  
+    allow_methods=["*"],  
+    allow_headers=["*"], 
 )
 
 @app.get("/")
@@ -31,6 +32,10 @@ class TranslationRequest(BaseModel):
 
 @app.post("/translate")
 async def translate(request_data: TranslationRequest):
+    response = Response()
+    response.headers["Access-Control-Allow-Origin"] = "https://xuemduan.github.io"
+    response.headers["Access-Control-Allow-Credentials"] = "true"
+
     try:
         shutil.rmtree("temp_input")
         os.mkdir("temp_input")
@@ -73,7 +78,10 @@ async def translate(request_data: TranslationRequest):
 
         if result.returncode == 0:
             shacl_output = result.stdout
-            return JSONResponse(content={"shacl_output": output})
+            response = JSONResponse(content={"shacl_output": output})
+            response.headers["Access-Control-Allow-Origin"] = "*"
+            response.headers["Access-Control-Allow-Credentials"] = "true"
+            return response
         else:
             error_message = result.stderr
             return JSONResponse(content={"error": error_message}, status_code=500)
