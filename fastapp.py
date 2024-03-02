@@ -1,5 +1,6 @@
 from fastapi import FastAPI, File, Form, UploadFile, HTTPException
 from fastapi.responses import JSONResponse
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import subprocess
 import rdflib
@@ -12,15 +13,15 @@ app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://xuemduan.github.io"],  # 允许的源
+    allow_origins=["https://xuemduan.github.io"],  
     allow_credentials=True,
-    allow_methods=["GET", "POST"],  # 允许的 HTTP 方法
-    allow_headers=["*"],  # 允许的请求头
+    allow_methods=["GET", "POST"], 
+    allow_headers=["*"],  
 )
 
-# @app.get("/")
-# async def index():
-#     return FileResponse("index.html")
+@app.get("/")
+async def index():
+    return FileResponse("index.html")
 
 class TranslationRequest(BaseModel):
     rmlData: str = None
