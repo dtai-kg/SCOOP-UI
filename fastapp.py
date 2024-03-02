@@ -51,13 +51,20 @@ async def translate(request_data: TranslationRequest):
         # shutil.rmtree("temp_output")
         # os.mkdir("temp_output")
         # output_file = "temp_output/shacl.ttl"
-        temp_dir = tempfile.mkdtemp()
-        rml_file = os.path.join(temp_dir, "rml.ttl")
-        owl_file = os.path.join(temp_dir, "owl.txt")
-        xsd_file = os.path.join(temp_dir, "xsd.xml")
-        output_file = os.path.join(temp_dir, "shacl.ttl")
 
-        shutil.rmtree(temp_dir)
+        
+        os.mkdir("tempp")
+        rml_file, owl_file, xsd_file, output_file= "tempp/rml.ttl","tempp/owl.txt","tempp/xsd.xml", "tempp/shacl.ttl"
+        
+        # temp_dir = tempfile.mkdtemp()
+        # console.log("temp_dir",temp_dir)
+
+        # rml_file = os.path.join(temp_dir, "rml.ttl")
+        # owl_file = os.path.join(temp_dir, "owl.txt")
+        # xsd_file = os.path.join(temp_dir, "xsd.xml")
+        # output_file = os.path.join(temp_dir, "shacl.ttl")
+
+        # shutil.rmtree(temp_dir)
 
         command = f"python scoop/main.py -ot {output_file}"
 
@@ -85,6 +92,8 @@ async def translate(request_data: TranslationRequest):
         output = rdflib.Graph().parse(output_file, format="turtle").serialize(
             format="turtle"
         )
+
+        shutil.rmtree("tempp")
 
         if result.returncode == 0:
             shacl_output = result.stdout
