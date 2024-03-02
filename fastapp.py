@@ -53,8 +53,8 @@ async def translate(request_data: TranslationRequest):
         # output_file = "temp_output/shacl.ttl"
 
         
-        os.mkdir("tempp")
-        rml_file, owl_file, xsd_file, output_file= "tempp/rml.ttl","tempp/owl.txt","tempp/xsd.xml", "tempp/shacl.ttl"
+        os.mkdir("tmp")
+        rml_file, owl_file, xsd_file, output_file= "tmp/rml.ttl","tmp/owl.txt","tmp/xsd.xml", "tmp/shacl.ttl"
         
         # temp_dir = tempfile.mkdtemp()
         # console.log("temp_dir",temp_dir)
@@ -93,7 +93,7 @@ async def translate(request_data: TranslationRequest):
             format="turtle"
         )
 
-        shutil.rmtree("tempp")
+        shutil.rmtree("tmp")
 
         if result.returncode == 0:
             shacl_output = result.stdout
