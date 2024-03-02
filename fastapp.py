@@ -20,6 +20,8 @@ app.add_middleware(
     allow_headers=["*"], 
 )
 
+app.mount("/static", StaticFiles(directory="static"), name="static")
+
 @app.get("/")
 async def index():
     return FileResponse("index.html", media_type="text/html", templates=True)
