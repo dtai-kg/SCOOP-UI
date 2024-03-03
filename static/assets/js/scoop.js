@@ -65,38 +65,16 @@ function handleFileUpload(input) {
     reader.readAsText(file);
 }
 
-// function translateIt() {
 
-//     var formData = new FormData();
-//     formData.append('xsdData', document.getElementById('xsdText').value);       
-//     formData.append('rmlData', document.getElementById('rmlText').value);
-//     formData.append('owlData', document.getElementById('owlText').value);
-
-//     // Send POST request to backend
-//     fetch('/translate', {
-//         method: 'POST',
-//         body: formData
-//     })
-//     .then(response => response.json())
-//     .then(data => {
-//         // Handle the response from backend
-//         console.log('SHACL output:', data);
-//         // document.getElementById('shaclOutput').innerText = JSON.stringify(data, null, 2);
-//         document.getElementById('shaclOutput').innerText = data.shacl_output;
-//         // Update your HTML elements with the SHACL output
-//     })
-//     .catch(error => {
-//         console.error('Error:', error);
-//     });   
-// } 
 function translateIt() {
 
+    var selectedOption = document.querySelector('input[name="mode"]:checked').value;
     var requestData = {
         rmlData: document.getElementById('rmlText').value,
         owlData: document.getElementById('owlText').value,
-        xsdData: document.getElementById('xsdText').value
+        xsdData: document.getElementById('xsdText').value,
+        mode: selectedOption
     };
-
 
     fetch('/translate', { 
         method: 'POST',
@@ -107,12 +85,42 @@ function translateIt() {
     })
     .then(response => response.json())
     .then(data => {
-
-        console.log('SHACL output:', data);
-        document.getElementById('shaclOutput').innerText = data.shacl_output;
-
+        console.log('Success:', data.shacl_output);
+        document.getElementById('shaclOutput').value = data.shacl_output;
     })
     .catch(error => {
         console.error('Error:', error);
     });   
+}
+
+
+
+const settingsIcon = document.getElementById('settingsIcon');
+const settingsModal = document.getElementById('settingsModal');
+const closeButton = document.getElementsByClassName('close')[0];
+const saveButton = document.getElementById('saveButton');
+
+settingsIcon.onclick = function() {
+  settingsModal.style.display = 'block';
+}
+
+closeButton.onclick = function() {
+  settingsModal.style.display = 'none';
+}
+
+saveButton.onclick = function() {
+  const checkboxChecked = document.getElementById('checkbox').checked;
+  const prioritySelected = document.querySelector('input[name="mode"]:checked').value;
+
+  console.log('Checkbox checked:', checkboxChecked);
+  console.log('Priority selected:', prioritySelected);
+
+  settingsModal.style.display = 'none';
+}
+
+// 当用户点击弹窗外部区域时关闭弹窗
+window.onclick = function(event) {
+  if (event.target == settingsModal) {
+    settingsModal.style.display = 'none';
+  }
 }

@@ -55,6 +55,7 @@ class TranslationRequest(BaseModel):
     rmlData: str = None
     owlData: str = None
     xsdData: str = None
+    mode : str = None
 
 
 @app.post("/translate")
@@ -62,6 +63,7 @@ async def translate(request_data: TranslationRequest):
 
     try:
         priority = ["rmlData", "owlData", "xsdData"]
+        console.log("okkkkk")
         shapes_graph = []
         for p in priority:
             if p == "rmlData" and request_data.rmlData:
@@ -87,8 +89,14 @@ async def translate(request_data: TranslationRequest):
 
                 shapes_graph.append((xsd_shacl_graph,"xsd"))
                 
-
-        shIn = ShapeIntegrationPriority(shapes_graph, "")
+        mode = request_data.mode
+        console.log("mode", mode)
+        if mode == "all":
+            shIn = ShapeIntegrationAll(shapes_graph, "")
+        elif mode == "priority":
+            shIn = ShapeIntegrationPriority(shapes_graph, "")
+        elif mode == "priority_r":
+            shIn = ShapeIntegrationPriorityR(shapes_graph, "")
         shacl_graph = shIn.integration()
         
         return JSONResponse(content={"shacl_output": shacl_graph.serialize(format="turtle")})
@@ -108,4 +116,3 @@ async def translate(request_data: TranslationRequest):
 if __name__ == "__main__":
     # uvicorn.run(app, host="0.0.0.0", port=8181)
     uvicorn.run(app, host="0.0.0.0")
-    # app.run(host="0.0.0.0", port=5000, debug=True)

@@ -3222,7 +3222,7 @@ input, select, textarea {
 		background-color: #ffffff;
 		color: #636363;
 		position: absolute;
-		width: 64em;
+		width: 84em;
 		max-width: calc(100% - 4em);
 		padding: 1em;
 		background-color: #f7f7f7;
@@ -3767,7 +3767,7 @@ input, select, textarea {
 /* Wrapper */
 
 	#wrapper {
-		width: 64em;
+		width: 84em;
 		max-width: calc(100% - 4em);
 		margin: 0 auto;
 	}
@@ -3794,10 +3794,65 @@ input, select, textarea {
 			padding-bottom: 0.25em;
 			padding-left: 0em;
 			padding-right: 0.5em;
+			
 		}
 		select {
 			font-size: 0.6em;
+			text-align: left;
+			width: 35%;
+			margin-top: -28px;
+			cursor: pointer
 		}
 		textarea {
 			color: black;
+			font-family: Arial, sans-serif;
+			font-size: 12px; 
+		}
+
+		/* setting icon */
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 1;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0,0,0,0.4);
+		}
+		
+		.modal-content {
+			background-color: #fefefe;
+			margin: 15% auto;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 40%;
+		}
+		
+		.close {
+			color: #aaa;
+			float: right;
+			font-size: 28px;
+			font-weight: bold;
+		}
+		
+		.close:hover,
+		.close:focus {
+			color: black;
+			text-decoration: none;
+			cursor: pointer;
+		}
+		.container {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+		.logo {
+			flex: 1;
+			margin: 0 5px; 
+		}
+		.logo img {
+			max-width: 100%; 
+			height: auto;
 		}
