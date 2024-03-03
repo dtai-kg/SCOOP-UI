@@ -22,16 +22,21 @@ def translateFromFile(ontology, output_file="output.ttl"):
 
     print("Start translating ontology file to SHACL shape by REST API", ontology)
 
+    # onto = {
+    # "ontology": rdflib.Graph().parse(ontology, format="turtle").serialize(format='turtle'),
+    # "serialisation": "TURTLE"
+    # }
     onto = {
-    "ontology": rdflib.Graph().parse(ontology, format="turtle").serialize(format='turtle'),
+    "ontology": ontology,
     "serialisation": "TURTLE"
     }
     astrea_url = 'https://astrea.linkeddata.es/api/shacl/document'
     shacl_shape = requests.post(astrea_url, json = onto)
     graph = rdflib.Graph().parse(data=shacl_shape.text, format="turtle")
-    graph = correctSHACL(graph)
-    graph.serialize(destination=output_file, format='turtle')
-    print("Saved SHACL shape to ", output_file)
+    return graph
+    # graph = correctSHACL(graph)
+    # graph.serialize(destination=output_file, format='turtle')
+    # print("Saved SHACL shape to ", output_file)
 
 def translateByJar(ontology, output_file="output.ttl"):
 

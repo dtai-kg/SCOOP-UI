@@ -5,12 +5,30 @@ from pydantic import BaseModel
 import subprocess
 import rdflib
 import os
+import sys
 import shutil
 import uvicorn
 from fastapi.responses import FileResponse
 from fastapi import Response
 from fastapi.staticfiles import StaticFiles
 import tempfile
+from rdflib import Graph
+from pyshacl import validate
+import multiprocessing as mp
+from scoop.SCOOP.shape_integration_priority import ShapeIntegrationPriority
+from scoop.SCOOP.shape_integration_priority_r import ShapeIntegrationPriorityR
+from scoop.SCOOP.shape_integration_all import ShapeIntegrationAll
+from scoop.SCOOP.shape_adjustment_single import ShapeAdjustment
+
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+sys.path.append(os.path.dirname(SCRIPT_DIR))
+from scoop.SCOOP.shape_generator.rml2shacl.src.RML import *
+from scoop.SCOOP.shape_generator.rml2shacl.src.RMLtoShacl import RMLtoSHACL
+from scoop.SCOOP.shape_generator.rml2shacl.src.SHACL import *
+
+from scoop.SCOOP.shape_generator.owl2shacl.src.OWLtoSHACL import translateFromUrl, translateFromFile, translateByJar
+
+from scoop.SCOOP.shape_generator.xsd2shacl.src.XSDtoSHACL import XSDtoSHACL
 
 app = FastAPI()
 
@@ -43,67 +61,51 @@ class TranslationRequest(BaseModel):
 async def translate(request_data: TranslationRequest):
 
     try:
-        # shutil.rmtree("temp_input")
-        # os.mkdir("temp_input")
-        # rml_file, owl_file, xsd_file = "temp_input/rml.ttl","temp_input/owl.txt","temp_input/xsd.xml"
+        priority = ["rmlData", "owlData", "xsdData"]
+        shapes_graph = []
+        for p in priority:
+            if p == "rmlData" and request_data.rmlData:
+                rmlGraph = rdflib.Graph().parse(data=request_data.rmlData, format="turtle")
+                RtoS = RMLtoSHACL()
+                rml_shacl_graph = RtoS.evaluate_file(rmlGraph, shacl_path="", write=False)
+                shapes_graph.append((rml_shacl_graph,"rml"))
+
+            if p == "owlData" and request_data.owlData:
+                owl_shacl_graph = translateFromFile(request_data.owlData)
+                shapes_graph.append((owl_shacl_graph,"owl"))
+
+            if p == "xsdData" and request_data.xsdData:
+                X2S = XSDtoSHACL()
+                xsd_shacl_graph = X2S.evaluate_file(request_data.xsdData)
+                if request_data.rmlData:
+                    print("Start adjusting shape")
+                    sa = ShapeAdjustment("xml")
+                    sa.parseRawDataSchemaShape(xsd_shacl_graph)
+                    rmlGraph = rdflib.Graph().parse(data=request_data.rmlData, format="turtle")
+                    sa.parseRML(rmlGraph)
+                    xsd_shacl_graph = sa.adjust(Graph()+xsd_shacl_graph)
+
+                shapes_graph.append((xsd_shacl_graph,"xsd"))
+                
+
+        shIn = ShapeIntegrationPriority(shapes_graph, "")
+        shacl_graph = shIn.integration()
         
+        return JSONResponse(content={"shacl_output": shacl_graph.serialize(format="turtle")})
 
-        # shutil.rmtree("temp_output")
-        # os.mkdir("temp_output")
-        # output_file = "temp_output/shacl.ttl"
-
-        
-        rml_file, owl_file, xsd_file, output_file= "tmp/rml.ttl","tmp/owl.txt","tmp/xsd.xml", "tmp/shacl.ttl"
-        
-        # temp_dir = tempfile.mkdtemp()
-        # console.log("temp_dir",temp_dir)
-
-        # rml_file = os.path.join(temp_dir, "rml.ttl")
-        # owl_file = os.path.join(temp_dir, "owl.txt")
-        # xsd_file = os.path.join(temp_dir, "xsd.xml")
-        # output_file = os.path.join(temp_dir, "shacl.ttl")
-
-        # shutil.rmtree(temp_dir)
-
-        command = f"python scoop/main.py -ot {output_file}"
-
-        mappings = request_data.rmlData
-        if len(mappings)>5:
-            rdflib.Graph().parse(data=mappings, format="turtle").serialize(
-                destination=rml_file, format="turtle"
-            )
-            command += f" -m {rml_file} -xr {rml_file}"
-
-        ontology = request_data.owlData
-        if len(ontology)>5:
-            open(owl_file, "w").write(ontology)
-            command += f" -o {owl_file}"
-
-        xsd = request_data.xsdData
-        if len(xsd)>5:
-            open(xsd_file, "w").write(xsd)
-            command += f" -x {xsd_file}"
-
-        result = subprocess.run(
-            command, shell=True, capture_output=True, text=True
-        )
-
-        output = rdflib.Graph().parse(output_file, format="turtle").serialize(
-            format="turtle"
-        )
-
-
-        if result.returncode == 0:
-            shacl_output = result.stdout
-            response = JSONResponse(content={"shacl_output": output})
-            response.headers["Access-Control-Allow-Origin"] = "*"
-            response.headers["Access-Control-Allow-Credentials"] = "true"
-            return response
-        else:
-            error_message = result.stderr
-            return JSONResponse(content={"error": error_message}, status_code=500)
+        # if result.returncode == 0:
+        #     shacl_output = result.stdout
+        #     response = JSONResponse(content={"shacl_output": output})
+        #     response.headers["Access-Control-Allow-Origin"] = "*"
+        #     response.headers["Access-Control-Allow-Credentials"] = "true"
+        #     return response
+        # else:
+        #     error_message = result.stderr
+        #     return JSONResponse(content={"error": error_message}, status_code=500)
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8181)
+    # uvicorn.run(app, host="0.0.0.0", port=8181)
+    uvicorn.run(app, host="0.0.0.0")
+    # app.run(host="0.0.0.0", port=5000, debug=True)
