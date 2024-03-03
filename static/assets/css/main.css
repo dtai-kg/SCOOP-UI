@@ -3856,3 +3856,26 @@ input, select, textarea {
 			max-width: 100%; 
 			height: auto;
 		}
+		/* HTML: <div class="loader"></div> */
+		/* HTML: <div class="loader"></div> */
+		.loader {
+			width: 120px;
+			height: 22px;
+			border-radius: 20px;
+			color: #514b82;
+			border: 2px solid;
+			position:relative;
+			align-items: center;
+		}
+		.loader::before {
+			content: "";
+			position: absolute;
+			margin: 2px;
+			inset: 0 100% 0 0;
+			border-radius: inherit;
+			background: currentColor;
+			animation: l6 2s infinite;
+		}
+		@keyframes l6 {
+			100% {inset:0}
+		}

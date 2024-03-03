@@ -65,9 +65,9 @@ function handleFileUpload(input) {
     reader.readAsText(file);
 }
 
-
+const loadingSpinner = document.getElementById('loadingSpinner');
 function translateIt() {
-
+    loadingSpinner.style.display = 'block';
     var selectedOption = document.querySelector('input[name="mode"]:checked').value;
     var requestData = {
         rmlData: document.getElementById('rmlText').value,
@@ -87,9 +87,11 @@ function translateIt() {
     .then(data => {
         console.log('Success:', data.shacl_output);
         document.getElementById('shaclOutput').value = data.shacl_output;
+        loadingSpinner.style.display = 'none';
     })
     .catch(error => {
         console.error('Error:', error);
+        loadingSpinner.style.display = 'none';
     });   
 }
 
@@ -109,18 +111,49 @@ closeButton.onclick = function() {
 }
 
 saveButton.onclick = function() {
-  const checkboxChecked = document.getElementById('checkbox').checked;
-  const prioritySelected = document.querySelector('input[name="mode"]:checked').value;
+//   const checkboxChecked = document.getElementById('checkbox').checked;
+//   const prioritySelected = document.querySelector('input[name="mode"]:checked').value;
 
-  console.log('Checkbox checked:', checkboxChecked);
-  console.log('Priority selected:', prioritySelected);
+//   console.log('Checkbox checked:', checkboxChecked);
+//   console.log('Priority selected:', prioritySelected);
 
   settingsModal.style.display = 'none';
 }
 
-// 当用户点击弹窗外部区域时关闭弹窗
+
 window.onclick = function(event) {
   if (event.target == settingsModal) {
     settingsModal.style.display = 'none';
   }
 }
+
+// const translateButton = document.getElementById('translateButton');
+// const loadingSpinner = document.getElementById('loadingSpinner');
+
+// translateButton.addEventListener('click', () => {
+
+//   loadingSpinner.style.display = 'block';
+
+
+//   fetch('/translate', {
+//     method: 'POST',
+//     headers: {
+//       'Content-Type': 'application/json' 
+//     },
+//     body: JSON.stringify(requestData) 
+//   })
+//   .then(response => response.json())
+//   .then(data => {
+
+//     loadingSpinner.style.display = 'none';
+
+
+//     console.log('Success:', data.shacl_output);
+//     document.getElementById('shaclOutput').value = data.shacl_output;
+//   })
+//   .catch(error => {
+
+//     loadingSpinner.style.display = 'none';
+//     console.error('Error:', error);
+//   });
+// });
