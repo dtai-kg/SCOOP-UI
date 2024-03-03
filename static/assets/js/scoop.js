@@ -75,7 +75,7 @@ function translateIt() {
         xsdData: document.getElementById('xsdText').value,
         mode: selectedOption
     };
-
+    console.log('Request data:', requestData);
     fetch('/translate', { 
         method: 'POST',
         headers: {

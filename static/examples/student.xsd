@@ -1,26 +1,22 @@
-<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:element name="students">
-    <xs:complexType>
-      <xs:sequence>
-        <xs:element name="student" maxOccurs="unbounded">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:element name="id" type="xs:integer"/>
-              <xs:element name="name" type="xs:string"/>
-              <xs:element name="phone" type="phoneNumberType"/>
-              <xs:element name="add" type="xs:string"/>
-              </xs:element>
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
-    </xs:complexType>
-  </xs:element>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 
-  <xsd:simpleType name="phoneNumberType">
-  <xsd:restriction base="xsd:string">
-    <xsd:maxLength value="10"/>
-    <xsd:minLength value="8"/>
-  </xsd:restriction>
-</xsd:simpleType>
-</xs:schema>
+  <xsd:element name="student" type="studentType"/>
+
+  <xsd:complexType name="studentType">
+    <xsd:sequence>
+      <xsd:element name="id" type="xsd:integer"/>
+      <xsd:element name="name" type="xsd:string"/>
+      <xsd:element name="add"  type="xsd:string"/>
+      <xsd:element name="phone">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:maxLength value="10"/>
+            <xsd:minLength value="8"/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:element>
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>
+

@@ -60,10 +60,10 @@ class TranslationRequest(BaseModel):
 
 @app.post("/translate")
 async def translate(request_data: TranslationRequest):
-
+    
     try:
         priority = ["rmlData", "owlData", "xsdData"]
-        console.log("okkkkk")
+
         shapes_graph = []
         for p in priority:
             if p == "rmlData" and request_data.rmlData:
@@ -90,7 +90,7 @@ async def translate(request_data: TranslationRequest):
                 shapes_graph.append((xsd_shacl_graph,"xsd"))
                 
         mode = request_data.mode
-        console.log("mode", mode)
+
         if mode == "all":
             shIn = ShapeIntegrationAll(shapes_graph, "")
         elif mode == "priority":
