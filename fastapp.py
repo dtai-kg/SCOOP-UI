@@ -15,20 +15,7 @@ import tempfile
 from rdflib import Graph
 from pyshacl import validate
 import multiprocessing as mp
-from scoop.SCOOP.shape_integration_priority import ShapeIntegrationPriority
-from scoop.SCOOP.shape_integration_priority_r import ShapeIntegrationPriorityR
-from scoop.SCOOP.shape_integration_all import ShapeIntegrationAll
-from scoop.SCOOP.shape_adjustment_single import ShapeAdjustment
-
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(os.path.dirname(SCRIPT_DIR))
-from scoop.SCOOP.shape_generator.rml2shacl.src.RML import *
-from scoop.SCOOP.shape_generator.rml2shacl.src.RMLtoShacl import RMLtoSHACL
-from scoop.SCOOP.shape_generator.rml2shacl.src.SHACL import *
-
-from scoop.SCOOP.shape_generator.owl2shacl.src.OWLtoSHACL import translateFromUrl, translateFromFile, translateByJar
-
-from scoop.SCOOP.shape_generator.xsd2shacl.src.XSDtoSHACL import XSDtoSHACL
+from scoop.main import main
 
 app = FastAPI()
 
@@ -62,57 +49,63 @@ class TranslationRequest(BaseModel):
 async def translate(request_data: TranslationRequest):
     
     try:
-        priority = ["rmlData", "owlData", "xsdData"]
-
-        shapes_graph = []
-        for p in priority:
-            if p == "rmlData" and request_data.rmlData:
-                rmlGraph = rdflib.Graph().parse(data=request_data.rmlData, format="turtle")
-                RtoS = RMLtoSHACL()
-                rml_shacl_graph = RtoS.evaluate_file(rmlGraph, shacl_path="", write=False)
-                shapes_graph.append((rml_shacl_graph,"rml"))
-
-            if p == "owlData" and request_data.owlData:
-                owl_shacl_graph = translateFromFile(request_data.owlData)
-                shapes_graph.append((owl_shacl_graph,"owl"))
-
-            if p == "xsdData" and request_data.xsdData:
-                X2S = XSDtoSHACL()
-                xsd_shacl_graph = X2S.evaluate_file(request_data.xsdData)
-                if request_data.rmlData:
-                    print("Start adjusting shape")
-                    sa = ShapeAdjustment("xml")
-                    sa.parseRawDataSchemaShape(xsd_shacl_graph)
-                    rmlGraph = rdflib.Graph().parse(data=request_data.rmlData, format="turtle")
-                    sa.parseRML(rmlGraph)
-                    xsd_shacl_graph = sa.adjust(Graph()+xsd_shacl_graph)
-
-                shapes_graph.append((xsd_shacl_graph,"xsd"))
-                
-        mode = request_data.mode
-
-        if mode == "all":
-            shIn = ShapeIntegrationAll(shapes_graph, "")
-        elif mode == "priority":
-            shIn = ShapeIntegrationPriority(shapes_graph, "")
-        elif mode == "priority_r":
-            shIn = ShapeIntegrationPriorityR(shapes_graph, "")
-        shacl_graph = shIn.integration()
+        # create temp folder
+        temp_folder = tempfile.mkdtemp()
         
-        return JSONResponse(content={"shacl_output": shacl_graph.serialize(format="turtle")})
+        # make subfolders
+        inputrml_folder = os.path.join(temp_folder, "inputrml")
+        os.makedirs(inputrml_folder)
+        rml_file = os.path.join(inputrml_folder, "rml.ttl")
 
-        # if result.returncode == 0:
-        #     shacl_output = result.stdout
-        #     response = JSONResponse(content={"shacl_output": output})
-        #     response.headers["Access-Control-Allow-Origin"] = "*"
-        #     response.headers["Access-Control-Allow-Credentials"] = "true"
-        #     return response
-        # else:
-        #     error_message = result.stderr
-        #     return JSONResponse(content={"error": error_message}, status_code=500)
+        inputowl_folder = os.path.join(temp_folder, "inputowl")
+        os.makedirs(inputowl_folder)
+        owl_file = os.path.join(inputowl_folder, "owl.txt")
+
+        inputxsd_folder = os.path.join(temp_folder, "inputxsd") 
+        os.makedirs(inputxsd_folder)
+        xsd_file = os.path.join(inputxsd_folder, "xsd.xml")
+
+        tempshacl_folder = os.path.join(temp_folder, "tempshacl")
+        os.makedirs(tempshacl_folder)
+
+        tempoutput_folder = os.path.join(temp_folder, "output")
+        os.makedirs(tempoutput_folder)
+        output_file = os.path.join(tempoutput_folder, "output.ttl")
+
+        args = ['-ot', output_file, '--tempshacl_folder', tempshacl_folder, '--mode', request_data.mode]
+
+        # command = f'python scoop/main.py -ot {output_file} --mode{request_data.mode} --tempshacl_folder {tempshacl_folder}'
+
+        priority = ["rmlData", "owlData", "xsdData"]
+ 
+        if request_data.rmlData:
+            rdflib.Graph().parse(data=request_data.rmlData, format="turtle").serialize(destination=rml_file, format="turtle")
+            # command += f' -m {rml_file} -xr {rml_file}'
+            args.extend(['-m', rml_file, '-xr', rml_file])
+        elif request_data.owlData:
+            open(owl_file, 'w', encoding='utf-8').write(request_data.owlData)
+            args.extend(['-o', owl_file])
+        elif request_data.xsdData:
+            open(xsd_file, 'w').write(request_data.xsdData)
+            # command += f' -x {xsd_file}'
+            args.extend(['-x', xsd_file])
+
+        # command += f' -ot {output_file}'
+
+        main(args)
+
+        output = rdflib.Graph().parse(output_file, format="turtle")
+  
+        shutil.rmtree(temp_folder)
+
+
+        return JSONResponse(content={"shacl_output": output.serialize(format="turtle")})
+
+
     except Exception as e:
         return JSONResponse(content={"error": str(e)}, status_code=500)
 
 if __name__ == "__main__":
     # uvicorn.run(app, host="0.0.0.0", port=8181)
+    # uvicorn.run(app, host="193.190.127.194")
     uvicorn.run(app, host="0.0.0.0")

@@ -6,7 +6,7 @@ from pyshacl import validate
 import argparse
 from .utils import recursiceCheck, built_in_types
 import time
-from io import StringIO
+
 
 class XSDtoSHACL:
     def __init__(self):
@@ -789,19 +789,16 @@ class XSDtoSHACL:
 
     
     def evaluate_file(self, xsd_file, shacl_file=None):
-        # self.BASE_PATH = os.path.dirname(xsd_file)
-        # self.xsdTree = ET.fromstring(xsd_file)
-        xsd_file_obj = StringIO(xsd_file)
-        self.xsdTree = ET.parse(xsd_file_obj)
+        self.BASE_PATH = os.path.dirname(xsd_file)
+        self.xsdTree = ET.parse(xsd_file)
         self.root = self.xsdTree.getroot()
 
         recursiceCheck(self.root)
 
-        xsd_file_obj = StringIO(xsd_file)
-        self.xsdNSdict = dict([node for (_, node) in ET.iterparse(xsd_file_obj, events=['start-ns'])])
+        self.xsdNSdict = dict([node for (_, node) in ET.iterparse(xsd_file, events=['start-ns'])])
 
         # print("#########Start parsing XSD file")
-        # self.parseXSD(self.root) #temp comment for api
+        self.parseXSD(self.root)
         # tree = ET.ElementTree(self.root)
         # tree.write("parse_merge.xsd", encoding="utf-8", xml_declaration=True)
         # return None
@@ -830,17 +827,9 @@ class XSDtoSHACL:
             print("Skip SHACL shape syntax check using pyshacl due to the size of SHACL shapes is too large! ")
 
         # print("#########Start writing to file")
-        # if shacl_file:
-        #     self.writeShapeToFile(shacl_file)
-        #     print(f"Saved SHACL shapes in {shacl_file}!")
-        # else:
-        #     self.writeShapeToFile(xsd_file + ".shape.ttl")
-        #     print(f"Saved SHACL shapes in {xsd_file}.shape.ttl!")
-        for prefix in self.xsdNSdict:
-            self.SHACL.bind(prefix, self.xsdNSdict[prefix])
-        self.SHACL.bind("ex", self.NS)
-        self.SHACL.bind('sh', 'http://www.w3.org/ns/shacl#', False)
-        return self.SHACL
-
-        
-
+        if shacl_file:
+            self.writeShapeToFile(shacl_file)
+            print(f"Saved SHACL shapes in {shacl_file}!")
+        else:
+            self.writeShapeToFile(xsd_file + ".shape.ttl")
+            print(f"Saved SHACL shapes in {xsd_file}.shape.ttl!")

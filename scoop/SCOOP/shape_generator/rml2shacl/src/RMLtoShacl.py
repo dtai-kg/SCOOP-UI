@@ -217,7 +217,7 @@ class RMLtoSHACL:
 
         return self.shacl_path
 
-    def evaluate_file(self, rml_mapping_file, shacl_path="", write=True):
+    def evaluate_file(self, rml_mapping_file, shacl_path, write=True):
         self.RML.parseFile(rml_mapping_file)
         self.shacl_path = shacl_path
 
@@ -241,5 +241,4 @@ class RMLtoSHACL:
         logging.debug(self.SHACL.results_text)
 
         return self.SHACL.graph
-
 

@@ -610,7 +610,6 @@ class ShapeAdjustment:
         self.clear_graph()
         self.reassign_identifier()
         self.adjusted_graph+=self.initial_graph
-        return self.adjusted_graph
 
     def writeShapeToFile(self, output_file):
         self.double_check()

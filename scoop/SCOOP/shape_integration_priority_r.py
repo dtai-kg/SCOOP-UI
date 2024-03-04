@@ -104,8 +104,7 @@ class ShapeIntegrationPriorityR():
                         for identifier_add in identifiers_add:
                             self.addShape(shape_add, identifier_add)
 
-        # self.writeShapeToFile()
-        return self.SHACL
+        self.writeShapeToFile()
 
     def getTargetDeclaration(self, shape: Graph, NodeShapes: List):
         targetDict = {}

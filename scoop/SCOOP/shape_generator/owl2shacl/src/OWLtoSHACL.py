@@ -6,7 +6,6 @@ import requests
 
 def translateFromUrl(ontology, output_file="output.ttl"):
 
-    print("Start translating ontology url to SHACL shape by REST API", ontology)
 
     onto = {"ontologies": [ontology]}
     astrea_url = 'https://astrea.linkeddata.es/api/shacl/url'
@@ -16,16 +15,10 @@ def translateFromUrl(ontology, output_file="output.ttl"):
     graph = correctSHACL(graph)
     graph.serialize(destination=output_file, format='turtle')
 
-    print("Saved SHACL shape to ", output_file)
 
 def translateFromFile(ontology, output_file="output.ttl"):
 
-    print("Start translating ontology file to SHACL shape by REST API", ontology)
 
-    # onto = {
-    # "ontology": rdflib.Graph().parse(ontology, format="turtle").serialize(format='turtle'),
-    # "serialisation": "TURTLE"
-    # }
     onto = {
     "ontology": ontology,
     "serialisation": "TURTLE"
@@ -33,14 +26,13 @@ def translateFromFile(ontology, output_file="output.ttl"):
     astrea_url = 'https://astrea.linkeddata.es/api/shacl/document'
     shacl_shape = requests.post(astrea_url, json = onto)
     graph = rdflib.Graph().parse(data=shacl_shape.text, format="turtle")
-    return graph
-    # graph = correctSHACL(graph)
-    # graph.serialize(destination=output_file, format='turtle')
-    # print("Saved SHACL shape to ", output_file)
+    graph = correctSHACL(graph)
+    graph.serialize(destination=output_file, format='turtle')
+
 
 def translateByJar(ontology, output_file="output.ttl"):
 
-    print("Start translating ontology to SHACL shape by JAR", ontology)
+
 
     AstreaKG = f"{os.path.dirname(os.path.dirname(__file__))}\src\Astrea-KG.ttl"
     astreajarpath = f"{os.path.dirname(os.path.dirname(__file__))}\src\Astrea2SHACL.jar"
@@ -56,10 +48,9 @@ def translateByJar(ontology, output_file="output.ttl"):
             graph = correctSHACL(graph)
             graph.serialize(destination=output_file, format='turtle')
 
-    print("Saved SHACL shape to ", output_file)
 
 def correctSHACL(shape):
-    print("Start fixing OOWL-driven SHACL shapes")
+   
     shaclNS = rdflib.Namespace('http://www.w3.org/ns/shacl#')
     checkList = [shaclNS.nodeKind, shaclNS.datatype, shaclNS.minCount, shaclNS.maxCount, shaclNS.minExclusive, shaclNS.maxExclusive, shaclNS.minInclusive, shaclNS.maxInclusive, shaclNS.minLength, shaclNS.maxLength, shaclNS.pattern, shaclNS.flags, shaclNS.languageIn, shaclNS.uniqueLang, shaclNS.qualifiedMinCount, shaclNS.qualifiedMaxCount]
     checkLiteralList = [shaclNS.minCount, shaclNS.maxCount, shaclNS.minExclusive, shaclNS.maxExclusive, shaclNS.minInclusive, shaclNS.maxInclusive, shaclNS.minLength, shaclNS.maxLength, shaclNS.qualifiedMinCount, shaclNS.qualifiedMaxCount]

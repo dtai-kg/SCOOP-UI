@@ -7,26 +7,27 @@ import datetime
 from rdflib import Graph
 from pyshacl import validate
 import multiprocessing as mp
-from SCOOP.shape_integration_priority import ShapeIntegrationPriority
-from SCOOP.shape_integration_priority_r import ShapeIntegrationPriorityR
-from SCOOP.shape_integration_all import ShapeIntegrationAll
-from SCOOP.shape_adjustment_single import ShapeAdjustment
+from scoop.SCOOP.shape_integration_priority import ShapeIntegrationPriority
+from scoop.SCOOP.shape_integration_priority_r import ShapeIntegrationPriorityR
+from scoop.SCOOP.shape_integration_all import ShapeIntegrationAll
+from scoop.SCOOP.shape_adjustment_single import ShapeAdjustment
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 sys.path.append(os.path.dirname(SCRIPT_DIR))
-from SCOOP.shape_generator.rml2shacl.src.RML import *
-from SCOOP.shape_generator.rml2shacl.src.RMLtoShacl import RMLtoSHACL
-from SCOOP.shape_generator.rml2shacl.src.SHACL import *
+from scoop.SCOOP.shape_generator.rml2shacl.src.RML import *
+from scoop.SCOOP.shape_generator.rml2shacl.src.RMLtoShacl import RMLtoSHACL
+from scoop.SCOOP.shape_generator.rml2shacl.src.SHACL import *
 
-from SCOOP.shape_generator.owl2shacl.src.OWLtoSHACL import translateFromUrl, translateFromFile, translateByJar
+from scoop.SCOOP.shape_generator.owl2shacl.src.OWLtoSHACL import translateFromUrl, translateFromFile, translateByJar
 
-from SCOOP.shape_generator.xsd2shacl.src.XSDtoSHACL import XSDtoSHACL
+from scoop.SCOOP.shape_generator.xsd2shacl.src.XSDtoSHACL import XSDtoSHACL
 
-def extract_shape_rml(rml_files):
+def extract_shape_rml(rml_files,tempshacl_folder):
     shacl_files = []
     for i in range(len(rml_files)):
         mapping_file = rml_files[i]
-        shacl_file = f'temp/rml{i}.ttl'
+        # shacl_file = f'temp/rml{i}.ttl'
+        shacl_file = os.path.join(tempshacl_folder, f'rml{i}.ttl')
         try:
             print("Translating RML file ", mapping_file)
             RtoS = RMLtoSHACL()
@@ -38,11 +39,12 @@ def extract_shape_rml(rml_files):
     return shacl_files
 
 
-def extract_shape_ontology(owl_files):
+def extract_shape_ontology(owl_files,tempshacl_folder):
     shacl_files = []
     for i in range(len(owl_files)):
         owl_file = owl_files[i]
-        shacl_file = f'temp/owl{i}.ttl'        
+        shacl_file = os.path.join(tempshacl_folder, f'owl{i}.ttl')
+        # shacl_file = f'temp/owl{i}.ttl'        
         try:
             translateByJar(owl_file, shacl_file)
         except:
@@ -52,11 +54,12 @@ def extract_shape_ontology(owl_files):
     print("=======Stored ontology-driven SHACL shapes in ", shacl_files)
     return shacl_files
 
-def extract_shape_xsd(xsd_files, rml_files=[]):
+def extract_shape_xsd(xsd_files,tempshacl_folder, rml_files=[]):
     shacl_files = []
     for i in range(len(xsd_files)):
         xsd_file = xsd_files[i]
-        shacl_file = f'temp/xsd{i}.ttl'
+        shacl_file = os.path.join(tempshacl_folder, f'xsd{i}.ttl')
+        # shacl_file = f'temp/xsd{i}.ttl'
         try:
             X2S = XSDtoSHACL()
             X2S.evaluate_file(xsd_file, shacl_file)
@@ -118,10 +121,10 @@ def integrate_shapes(shapes, output_file, mode):
         print("Saved final file in ", output_file)
 
 def extract_preliminary_shapes(args):
-    if not os.path.exists("temp"):
-        os.mkdir("temp")
+    # if not os.path.exists("temp"):
+    #     os.mkdir("temp")
     
-    
+    tempshacl_folder = args.tempshacl_folder
     shapes = []
 
     for p in args.priority:
@@ -133,7 +136,7 @@ def extract_preliminary_shapes(args):
                     rml_files.extend([os.path.join(rml, f) for f in os.listdir(rml) if f.endswith('.ttl')])
                 else:
                     rml_files.append(rml)
-            rml_shacl_files = extract_shape_rml(rml_files)
+            rml_shacl_files = extract_shape_rml(rml_files,tempshacl_folder)
             shapes.extend(rml_shacl_files)
             print("Finish translating rml")
 
@@ -142,10 +145,10 @@ def extract_preliminary_shapes(args):
             owl_files = []
             for owl in args.ontology:
                 if os.path.isdir(owl):
-                    owl_files.extend([os.path.join(owl, f) for f in os.listdir(owl) if f.endswith('.owl') or f.endswith('.ttl') or f.endswith('.rdf')])
+                    owl_files.extend([os.path.join(owl, f) for f in os.listdir(owl) if f.endswith('.owl') or f.endswith('.ttl') or f.endswith('.rdf') or f.endswith('.txt')])
                 else:
                     owl_files.append(owl)
-            owl_shacl_files = extract_shape_ontology(owl_files)
+            owl_shacl_files = extract_shape_ontology(owl_files,tempshacl_folder)
             shapes.extend(owl_shacl_files)
             print("Finish translating ontology")
 
@@ -166,9 +169,9 @@ def extract_preliminary_shapes(args):
                         xsd_rml_files.extend([os.path.join(rml, f) for f in os.listdir(rml) if f.endswith('.ttl') or f.endswith('.rml')])
                     else:
                         xsd_rml_files.append(rml)
-                xsd_shacl_files = extract_shape_xsd(xsd_files, xsd_rml_files)
+                xsd_shacl_files = extract_shape_xsd(xsd_files, tempshacl_folder, xsd_rml_files)
             else:
-                xsd_shacl_files = extract_shape_xsd(xsd_files)
+                xsd_shacl_files = extract_shape_xsd(xsd_files,tempshacl_folder)
             shapes.extend(xsd_shacl_files)
             print("Finish translating xsd")
     return shapes
@@ -240,7 +243,8 @@ def extract_preliminary_shapes_parallel(args):
     
     return shapes
 
-if __name__ == "__main__":
+# if __name__ == "__main__":
+def main(args):
     parser = argparse.ArgumentParser(description='Shape Integration')
     parser.add_argument('--mode', type=str, help='integration mode: priority, priorityR, or all', default="priority")
     parser.add_argument('--parallel', type=bool, help='parallel mode: True or False', default=False)
@@ -250,7 +254,8 @@ if __name__ == "__main__":
     parser.add_argument('--xsd', '-x', type=str, nargs='+', help='Path to folder or xsd file to be translated')
     parser.add_argument('--xsd_rml', '-xr', type=str, nargs='+', help='Path to folder or rml file for post-adjustment of XSD-driven shape')
     parser.add_argument('--output', '-ot', type=str, help='Output file', default='shape_integration.ttl')
-    args = parser.parse_args()
+    parser.add_argument('--tempshacl_folder', '-tf', type=str, help='Temp folder for storing preliminary shapes', default='temp')
+    args = parser.parse_args(args)
 
     total_start_time = time.time()
     if args.parallel:
@@ -265,8 +270,8 @@ if __name__ == "__main__":
 
     total_end_time = time.time()    
     
-    print("Cleaning temp folder...")
-    for f in os.listdir("temp"):
-        os.remove(os.path.join("temp", f))
+    # print("Cleaning temp folder...")
+    # for f in os.listdir("temp"):
+    #     os.remove(os.path.join("temp", f))
 
     print("Total time: ", total_end_time - total_start_time)

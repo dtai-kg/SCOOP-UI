@@ -54,8 +54,7 @@ class RML:
                 pprint.pprint(stmt)
 
     def parseFile(self, file_name):
-        # self.graph.parse(file_name, format=rdflib.util.guess_format(file_name))
-        self.graph = file_name # temp for api
+        self.graph.parse(file_name, format=rdflib.util.guess_format(file_name))
         self.tm_model_dict = self.parseTriplesMaps(self.graph)
 
     def printQuery(self, graph, query):
