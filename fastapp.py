@@ -17,6 +17,10 @@ from pyshacl import validate
 import multiprocessing as mp
 from scoop.main import main
 
+from scoop.SCOOP.shape_integration_priority import ShapeIntegrationPriority
+from scoop.SCOOP.shape_integration_priority_r import ShapeIntegrationPriorityR
+from scoop.SCOOP.shape_integration_all import ShapeIntegrationAll
+
 app = FastAPI()
 
 app.add_middleware(
@@ -49,7 +53,7 @@ class TranslationRequest(BaseModel):
 async def translate(request_data: TranslationRequest):
     
     try:
-        # create temp folder
+    # create temp folder
         temp_folder = tempfile.mkdtemp()
         
         # make subfolders
@@ -72,34 +76,71 @@ async def translate(request_data: TranslationRequest):
         os.makedirs(tempoutput_folder)
         output_file = os.path.join(tempoutput_folder, "output.ttl")
 
+        print("mode",request_data.mode)
         args = ['-ot', output_file, '--tempshacl_folder', tempshacl_folder, '--mode', request_data.mode]
 
-        # command = f'python scoop/main.py -ot {output_file} --mode{request_data.mode} --tempshacl_folder {tempshacl_folder}'
-
         priority = ["rmlData", "owlData", "xsdData"]
- 
+
         if request_data.rmlData:
             rdflib.Graph().parse(data=request_data.rmlData, format="turtle").serialize(destination=rml_file, format="turtle")
-            # command += f' -m {rml_file} -xr {rml_file}'
             args.extend(['-m', rml_file, '-xr', rml_file])
-        elif request_data.owlData:
+        if request_data.owlData:
             open(owl_file, 'w', encoding='utf-8').write(request_data.owlData)
             args.extend(['-o', owl_file])
-        elif request_data.xsdData:
+        if request_data.xsdData:
             open(xsd_file, 'w').write(request_data.xsdData)
-            # command += f' -x {xsd_file}'
             args.extend(['-x', xsd_file])
 
-        # command += f' -ot {output_file}'
-
         main(args)
-
         output = rdflib.Graph().parse(output_file, format="turtle")
-  
         shutil.rmtree(temp_folder)
-
-
         return JSONResponse(content={"shacl_output": output.serialize(format="turtle")})
+
+
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
+
+class IntegrationRequest(BaseModel):
+    shacl1Data: str = None
+    shacl2Data: str = None
+    mode : str = None
+
+@app.post("/integrate")
+async def integrate(request_data: IntegrationRequest):
+    
+    try:
+        temp_folder = tempfile.mkdtemp()
+        output_file = os.path.join(temp_folder, "output.ttl")
+
+        priority = ["SHACL Shapes 1", "SHACL Shapes 2"]
+        shapes_graph = []
+
+        if request_data.shacl1Data and request_data.shacl2Data:
+            for p in priority:
+                if p=="SHACL Shapes 1" and request_data.shacl1Data:
+                    shapes_graph.append(rdflib.Graph().parse(data=request_data.shacl1Data, format="turtle"))
+                elif p=="SHACL Shapes 2" and request_data.shacl2Data:
+                    shapes_graph.append(rdflib.Graph().parse(data=request_data.shacl2Data, format="turtle"))
+
+            shapes_graph[0] = (shapes_graph[0], "")
+            shapes_graph[1] = (shapes_graph[1], "owl")
+            print("ssss",shapes_graph)
+
+            if request_data.mode == "all":
+                shIn = ShapeIntegrationAll(shapes_graph, output_file)
+            elif request_data.mode == "priority":
+                shIn = ShapeIntegrationPriority(shapes_graph, output_file)
+            elif request_data.mode == "priority_R":
+                shIn = ShapeIntegrationPriorityR(shapes_graph, output_file)
+            shacl_graph = shIn.integration()
+            shutil.rmtree(temp_folder)
+        else:
+            if request_data.shacl1Data:
+                shacl_graph = rdflib.Graph().parse(data=request_data.shacl1Data, format="turtle")
+            elif request_data.shacl2Data:
+                shacl_graph = rdflib.Graph().parse(data=request_data.shacl2Data, format="turtle")
+
+        return JSONResponse(content={"shacl_output_integ": shacl_graph.serialize(format="turtle")})
 
 
     except Exception as e:

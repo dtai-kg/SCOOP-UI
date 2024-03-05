@@ -107,6 +107,7 @@ class ShapeIntegrationAll():
                         self.addShape(shape_add, identifier_add)
 
         self.writeShapeToFile()
+        return self.SHACL
 
     def getTargetDeclaration(self, shape: Graph, NodeShapes: List):
         targetDict = {}
