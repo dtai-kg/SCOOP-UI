@@ -3895,3 +3895,17 @@ input, select, textarea {
 		@keyframes l6 {
 			100% {inset:0}
 		}
+		.priorityOption {
+			display: flex;
+			align-items: center;
+			margin-bottom: 10px;
+		}
+	
+		.priorityOption button {
+			font-size: 12px;
+		}
+	
+		.priorityButton {
+			width: 80px;
+			height: 30px;
+		}

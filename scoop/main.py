@@ -126,7 +126,6 @@ def extract_preliminary_shapes(args):
     
     tempshacl_folder = args.tempshacl_folder
     shapes = []
-
     for p in args.priority:
         if p == 'rml' and args.mappings:
             print("Start translating rml")

@@ -107,14 +107,19 @@ const loadingSpinner = document.getElementById('loadingSpinner');
 
 function translateIt() {
     loadingSpinner.style.display = 'block';
-    var selectedOption = document.querySelector('input[name="mode"]:checked').value;
+    var selectedOptions = document.querySelectorAll('input[name="mode"]:checked');
+    var priorityOrder = Array.from(document.querySelectorAll('.priorityButton')).map(function(button) {
+        return button.id;
+    });
+   
     var requestData = {
         rmlData: document.getElementById('rmlText').value,
         owlData: document.getElementById('owlText').value,
         xsdData: document.getElementById('xsdText').value,
-        mode: selectedOption
+        mode: selectedOptions[0].value, 
+        priority: priorityOrder.join(' ')
     };
-    // console.log('Request data:', requestData);
+
     fetch('/translate', { 
         method: 'POST',
         headers: {
@@ -124,7 +129,6 @@ function translateIt() {
     })
     .then(response => response.json())
     .then(data => {
-        // console.log('Success:', data.shacl_output);
         document.getElementById('shaclOutput').value = data.shacl_output;
         loadingSpinner.style.display = 'none';
     })
@@ -133,6 +137,7 @@ function translateIt() {
         loadingSpinner.style.display = 'none';
     });   
 }
+
 
 const loadingSpinner_integ = document.getElementById('loadingSpinner_integ');
 
@@ -217,3 +222,55 @@ window.onclick = function(event) {
     settingsModal_integ.style.display = 'none';
   }
 }
+
+// priority 
+function drag(ev) {
+    ev.dataTransfer.setData("text", ev.target.id);
+}
+
+function allowDrop(ev) {
+    ev.preventDefault();
+}
+
+function drop(ev) {
+    ev.preventDefault();
+    var data = ev.dataTransfer.getData("text");
+    var draggedButton = document.getElementById(data);
+    var targetButton = ev.target.closest('.priorityOption').querySelector('.priorityButton');
+    var targetIndex = Array.from(targetButton.parentNode.children).indexOf(targetButton);
+    var draggedIndex = Array.from(draggedButton.parentNode.children).indexOf(draggedButton);
+
+    if (draggedIndex < targetIndex) {
+        targetButton.parentNode.insertBefore(draggedButton, targetButton.nextSibling);
+    } else {
+        targetButton.parentNode.insertBefore(draggedButton, targetButton);
+    }
+}
+
+document.getElementById('priorityOptions').style.display = 'none';
+document.getElementById('priorityROptions').style.display = 'none';
+
+if (document.getElementById('priority').checked) {
+    document.getElementById('priorityOptions').style.display = 'flex';
+} else if (document.getElementById('priority-r').checked) {
+    document.getElementById('priorityROptions').style.display = 'flex';
+}
+
+document.getElementById('priority').addEventListener('change', function() {
+    document.getElementById('priorityOptions').style.display = this.checked ? 'flex' : 'none';
+    document.getElementById('priorityROptions').style.display = 'none'; 
+});
+
+document.getElementById('priority-r').addEventListener('change', function() {
+    document.getElementById('priorityROptions').style.display = this.checked ? 'flex' : 'none';
+    document.getElementById('priorityOptions').style.display = 'none'; 
+});
+
+
+document.getElementById('saveButton').addEventListener('click', function() {
+    var priorityOrder = Array.from(document.querySelectorAll('.priorityButton')).map(function(button) {
+        return button.id;
+    });
+    console.log('Priority Order:', priorityOrder);
+    // Send priorityOrder to backend
+});

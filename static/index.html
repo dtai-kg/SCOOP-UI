@@ -47,7 +47,7 @@
 
 										<div style="flex: 1; margin-right: 10px;">
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<h5 style="margin-top: -18px; font-weight: bold;">Raw Data Schemas</h5>
+												<h5 style="margin-top: -18px; font-weight: bold;">Input: Raw Data Schemas</h5>
 												<select id="exampleSelect" onchange="xsdLoadExample(this.value)">
 													<option value="">Select an example...</option>
 													<option value="student.xsd">student.xsd</option>
@@ -60,7 +60,7 @@
 
 										<div style="flex: 1; margin-right: 10px;">
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<h5 style="margin-top: -18px; margin-right: 65px;  font-weight: bold;">Mapping Rules</h5>
+												<h5 style="margin-top: -18px; margin-right: 65px;  font-weight: bold;">Input: Mapping Rules</h5>
 												<select id="exampleSelect" onchange="rmlLoadExample(this.value)">
 													<option value="">Select an example...</option>
 													<option value="student.rml.ttl">student.rml.ttl</option>
@@ -73,7 +73,7 @@
 
 										<div style="flex: 1; margin-right: 10px;">
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<h5 style="margin-top: -18px; font-weight: bold;">Ontologies</h5>
+												<h5 style="margin-top: -18px; font-weight: bold;">Input: Ontologies</h5>
 												<select id="exampleSelect" onchange="owlLoadExample(this.value)">
 													<option value="">Select an example...</option>
 													<option value="student.owl">student.owl</option>
@@ -86,7 +86,7 @@
 									</div>
 
 									<div style="margin-top: 20px;">
-										<h5 style="margin-top: -12px; font-weight: bold;">SHACL Shapes</h5>
+										<h5 style="margin-top: -12px; font-weight: bold;">Output: SHACL Shapes</h5>
 										<textarea id="shaclOutput" placeholder="Integrated SHACL Shapes" style="width: 100%; height: 200px; margin-top: -5px; white-space: pre-wrap;"></textarea>
 									</div>
 
@@ -104,8 +104,32 @@
 												<form id="settingsForm">
 													<input type="radio" id="priority" name="mode" value="priority" checked>
 													<label for="priority">SCOOP-Prior</label><br>
+													<div id="priorityOptions" style="display: none; display: flex;">
+														<i style="font-size:medium;">Drage to change priority:&nbsp;&nbsp;</i>
+														<div class="priorityOption" ondrop="drop(event)" ondragover="allowDrop(event)">
+															<button id="rml" class="priorityButton" draggable="true" ondragstart="drag(event)">RML</button>
+														</div>
+														<div class="priorityOption" ondrop="drop(event)" ondragover="allowDrop(event)">
+															<button id="ontology" class="priorityButton" draggable="true" ondragstart="drag(event)">OWL</button>
+														</div>
+														<div class="priorityOption" ondrop="drop(event)" ondragover="allowDrop(event)">
+															<button id="xsd" class="priorityButton" draggable="true" ondragstart="drag(event)">XSD</button>
+														</div>
+													</div>
 													<input type="radio" id="priority-r" name="mode" value="priorityR">
 													<label for="priority-r">SCOOP-Prior-R</label><br>
+													<div id="priorityROptions" style="display: none; display: flex;">
+														<i style="font-size: medium;">Drag to change priority:&nbsp;&nbsp;</i>
+														<div class="priorityOption" ondrop="drop(event)" ondragover="allowDrop(event)">
+															<button id="rml-r" class="priorityButton" draggable="true" ondragstart="drag(event)">RML</button>
+														</div>
+														<div class="priorityOption" ondrop="drop(event)" ondragover="allowDrop(event)">
+															<button id="ontology-r" class="priorityButton" draggable="true" ondragstart="drag(event)">OWL</button>
+														</div>
+														<div class="priorityOption" ondrop="drop(event)" ondragover="allowDrop(event)">
+															<button id="xsd-r" class="priorityButton" draggable="true" ondragstart="drag(event)">XSD</button>
+														</div>
+													</div>
 													<input type="radio" id="all" name="mode" value="all">
 													<label for="all">SCOOP-All</label><br>
 													<button type="button" id="saveButton">Save</button>
@@ -130,7 +154,7 @@
 									<div style="display: flex; flex-wrap: wrap;">
 										<div style="flex: 1; margin-right: 10px;">
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<h5 style="margin-top: -18px; font-weight: bold;">SHACL Shapes</h5>
+												<h5 style="margin-top: -18px; font-weight: bold;">Input: SHACL Shapes 1</h5>
 												<select id="exampleSelect" onchange="shacl1LoadExample(this.value)">
 													<option value="">Select an example...</option>
 													<option value="shape1.ttl">shape1.ttl</option>
@@ -143,7 +167,7 @@
 									
 										<div style="flex: 1; margin-right: 10px;">
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<h5 style="margin-top: -18px; font-weight: bold;">SHACL Shapes</h5>
+												<h5 style="margin-top: -18px; font-weight: bold;">Input: SHACL Shapes 2</h5>
 												<select id="exampleSelect" onchange="shacl2LoadExample(this.value)">
 													<option value="">Select an example...</option>
 													<option value="shape2.ttl">shape2.ttl</option>
@@ -156,7 +180,7 @@
 									</div>
 									
 									<div style="flex: 1; margin-top: 20px;">
-										<h5 style="margin-top: -12px; font-weight: bold;">SHACL Shapes</h5>
+										<h5 style="margin-top: -12px; font-weight: bold;">Output: SHACL Shapes</h5>
 										<textarea id="shaclOutput_integ" placeholder="Integrated SHACL Shapes" style="width: 100%; height: 200px; margin-top: -5px; white-space: pre-wrap;"></textarea>
 									</div>
 									
