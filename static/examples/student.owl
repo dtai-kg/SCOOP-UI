@@ -13,6 +13,11 @@
   ] ;
   rdfs:label "Student" .
 
+<http://example.org/phoneNumber> a owl:DatatypeProperty ;
+  rdfs:domain <http://example.org/Student> ;
+  rdfs:range xsd:string ;
+  rdfs:label "student phone number" .
+
 <http://example.org/id> a owl:DatatypeProperty ;
   rdfs:domain <http://example.org/Student> ;
   rdfs:range xsd:integer ;
@@ -28,7 +33,3 @@
   rdfs:range xsd:string ;
   rdfs:label "student address" .
 
-<http://example.org/phoneNumber> a owl:DatatypeProperty ;
-  rdfs:domain <http://example.org/Student> ;
-  rdfs:range xsd:string ;
-  rdfs:label "student phone number" .

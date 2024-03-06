@@ -154,7 +154,7 @@
 									<div style="display: flex; flex-wrap: wrap;">
 										<div style="flex: 1; margin-right: 10px;">
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<h5 style="margin-top: -18px; font-weight: bold;">Input: SHACL Shapes 1</h5>
+												<h5 style="margin-top: -18px; font-weight: bold;">Input: SHACL Shapes</h5>
 												<select id="exampleSelect" onchange="shacl1LoadExample(this.value)">
 													<option value="">Select an example...</option>
 													<option value="shape1.ttl">shape1.ttl</option>
@@ -167,7 +167,7 @@
 									
 										<div style="flex: 1; margin-right: 10px;">
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<h5 style="margin-top: -18px; font-weight: bold;">Input: SHACL Shapes 2</h5>
+												<h5 style="margin-top: -18px; font-weight: bold;">Input: SHACL Shapes</h5>
 												<select id="exampleSelect" onchange="shacl2LoadExample(this.value)">
 													<option value="">Select an example...</option>
 													<option value="shape2.ttl">shape2.ttl</option>
@@ -215,14 +215,49 @@
 						</section>
 
 
-
+						
 						<!-- Documentation -->
 							<section id="doc" class="main special">
 								<header class="major">
-									<h2>SCOOP</h2>
-									<p>SCOOP is a framework that exploits all artifacts associated with the construction of an RDF graph, i.e. data schemas, ontologies, and mapping rules, and integrates the SHACL shapes extracted from each artifact into a unified shapes graph..</p>
+									<h2><a href="https://github.com/dtai-kg/SCOOP-UI/">SCOOP-UI</a> Documentation</h2>
+									<p><a href="https://github.com/dtai-kg/SCOOP">SCOOP</a> is a framework that exploits all artifacts associated with the construction of an RDF graph, i.e. data schemas, ontologies, and mapping rules, and integrates the SHACL shapes extracted from each artifact into a unified shapes graph.</p>
 								</header>
-								<!-- <footer class="major">
+								<div class="content">
+									<h3 style="text-align: left; font-weight: bold">SCOOP Framework</h3>
+									<img src="images/scoop_framework.svg" style="width: 60%;"/>
+
+									<h3 style="text-align: left; font-weight: bold">SCOOP-UI Features</h3>
+
+									<ul style="text-align: left;">
+									  <li><strong>Single Resource Input:</strong> When a single source is given as input, e.g., a data schema, an ontology or a set of mapping rules, the application automatically triggers the corresponding shapes extraction component to directly generate the corresponding SHACL shapes.</li>
+									  
+									  <li><strong>Multiple Resources Inputs:</strong> When multiple resources are given as input, the application invokes the corresponding shape extraction components to extract the shapes and shape integration module to integrate the shapes.</li>
+									  
+									  <li><strong>Multiple SHACL Shapes Inputs:</strong> While SCOOP is designed to accommodate various input resources, this application isolates the integration module of SCOOP to enable the support for integrating multiple inputs of SHACL shapes.</li>
+									</ul>
+									
+									<h3 style="text-align: left; font-weight: bold">Configurations</h3>
+									
+									<ul style="text-align: left;">
+									  <li><strong>Integration Strategies:</strong> Select one from three integration strategies: SCOOP-All, SCOOP-Prior, and SCOOP-Prior-R. The adoption of different strategies influences the resolution of conflicting constraints.</li>
+									  
+									  <li><strong>Integration Priorities:</strong> Easily rearrange and prioritize your SHACL shapes integration using simple drag-and-drop functionality.</li>
+									</ul>
+									
+									<h3 style="text-align: left; font-weight: bold">How to Use</h3>
+									
+									<ol style="text-align: left;">
+									  <li><strong>Access SCOOP-UI:</strong> Visit the provided URL and start shaping your data immediately.</li>
+									  
+									  <li><strong>Input Data:</strong> Enter the text box, upload a file, or click on a predefined example.</li>
+									  
+									  <li><strong>Set Configurations:</strong> Click the setting icon next to the translate and integrate button.</li>
+									  
+									  <li><strong>Generate Output:</strong> Click the translate and integrate button to generate.</li>
+									</ol>
+									
+								</div>
+									<!-- <footer class="major">
 									<ul class="actions special">
 										<li><a href="generic.html" class="button primary">Get Started</a></li>
 										<li><a href="generic.html" class="button">Learn More</a></li>
@@ -246,10 +281,14 @@
 							
 						</section>
 						<section>
-							<h2>Contact</h2>
+							
+							<h2>Contact:</h2>
+							<h4>Xuemin Duan, David Chaves-Fraga, and Anastasia Dimou</h4>
 							<div style="display: flex; justify-content: space-between; align-items: center;">
 								<dl class="alt">
 									<dt><a href="mailto:xuemin.duan@kuleuven.be">xuemin.duan@kuleuven.be</a></dt>
+									<dt><a href="mailto:david.chaves@usc.es">david.chaves@usc.es</a></dt>
+									<dt><a href="mailto:anastasia.dimou@kuleuven.be">anastasia.dimou@kuleuven.be</a></dt>
 								</dl>
 								<ul class="icons">
 									<li><a href="https://github.com/dtai-kg/SCOOP" class="icon brands fa-github alt"><span class="label">GitHub</span></a></li>
