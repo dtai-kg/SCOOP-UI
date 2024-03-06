@@ -1,4 +1,4 @@
-🚀 **SCOOP-UI: SHACL Shape Extraction in Just a Click!**
+# 🚀 SCOOP-UI: SHACL Shape Extraction in Just a Click!
 
 This repository demonstrates how to quickly extract and integrate SHACL shapes using SCOOP-UI, a user-friendly web-based interface built with [SCOOP-UI](https://github.com/dtai-kg/SCOOP). With SCOOP-UI, there's no need for complex installations or setups – just click and start shaping your data effortlessly!
 
