@@ -36,8 +36,8 @@ def translateByJar(ontology, output_file="output.ttl"):
 
     AstreaKG = f"{os.path.dirname(os.path.dirname(__file__))}\src\Astrea-KG.ttl"
     astreajarpath = f"{os.path.dirname(os.path.dirname(__file__))}\src\Astrea2SHACL.jar"
-    ontology = f"{os.path.dirname(os.path.dirname(__file__))}\..\..\..\..\{ontology}"
-
+    # ontology = f"{os.path.dirname(os.path.dirname(__file__))}\..\..\..\..\{ontology}"
+    
     subprocesscommand = ['java', '-jar', astreajarpath, AstreaKG, ontology]
     result = subprocess.check_output(subprocesscommand, stderr=subprocess.STDOUT, text=True)
     graphs = result.split('Astrea2SHACLGraphDelimiter\n')

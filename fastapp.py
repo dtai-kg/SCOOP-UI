@@ -53,61 +53,61 @@ class TranslationRequest(BaseModel):
 @app.post("/translate")
 async def translate(request_data: TranslationRequest):
     
-    # try:
-    # create temp folder
-    temp_folder = tempfile.mkdtemp()
-    
-    # make subfolders
-    inputrml_folder = os.path.join(temp_folder, "inputrml")
-    os.makedirs(inputrml_folder)
-    rml_file = os.path.join(inputrml_folder, "rml.ttl")
+    try:
+        # create temp folder
+        temp_folder = tempfile.mkdtemp()
+        
+        # make subfolders
+        inputrml_folder = os.path.join(temp_folder, "inputrml")
+        os.makedirs(inputrml_folder)
+        rml_file = os.path.join(inputrml_folder, "rml.ttl")
 
-    inputowl_folder = os.path.join(temp_folder, "inputowl")
-    os.makedirs(inputowl_folder)
-    owl_file = os.path.join(inputowl_folder, "owl.txt")
+        inputowl_folder = os.path.join(temp_folder, "inputowl")
+        os.makedirs(inputowl_folder)
+        owl_file = os.path.join(inputowl_folder, "owl.txt")
 
-    inputxsd_folder = os.path.join(temp_folder, "inputxsd") 
-    os.makedirs(inputxsd_folder)
-    xsd_file = os.path.join(inputxsd_folder, "xsd.xml")
+        inputxsd_folder = os.path.join(temp_folder, "inputxsd") 
+        os.makedirs(inputxsd_folder)
+        xsd_file = os.path.join(inputxsd_folder, "xsd.xml")
 
-    tempshacl_folder = os.path.join(temp_folder, "tempshacl")
-    os.makedirs(tempshacl_folder)
+        tempshacl_folder = os.path.join(temp_folder, "tempshacl")
+        os.makedirs(tempshacl_folder)
 
-    tempoutput_folder = os.path.join(temp_folder, "output")
-    os.makedirs(tempoutput_folder)
-    output_file = os.path.join(tempoutput_folder, "output.ttl")
+        tempoutput_folder = os.path.join(temp_folder, "output")
+        os.makedirs(tempoutput_folder)
+        output_file = os.path.join(tempoutput_folder, "output.ttl")
 
-    print("mode",request_data.mode)
-    args = ['-ot', output_file, '--tempshacl_folder', tempshacl_folder, '--mode', request_data.mode]
+        print("mode",request_data.mode)
+        args = ['-ot', output_file, '--tempshacl_folder', tempshacl_folder, '--mode', request_data.mode]
 
-    priority = ["rml", "ontology", "xsd"]
-    if request_data.priority:
-        priority = request_data.priority.split(" ")
-    if request_data.mode == "priorityR":
-        priority = [i.replace("-r","") for i in priority if "-r" in i]
-    elif request_data.mode == "priority":
-        priority = [i for i in priority if "-r" not in i]
-    
-    args.append('--priority')
-    args.extend(priority)
+        priority = ["rml", "ontology", "xsd"]
+        if request_data.priority:
+            priority = request_data.priority.split(" ")
+        if request_data.mode == "priorityR":
+            priority = [i.replace("-r","") for i in priority if "-r" in i]
+        elif request_data.mode == "priority":
+            priority = [i for i in priority if "-r" not in i]
+        
+        args.append('--priority')
+        args.extend(priority)
 
-    if request_data.rmlData:
-        rdflib.Graph().parse(data=request_data.rmlData, format="turtle").serialize(destination=rml_file, format="turtle")
-        args.extend(['-m', rml_file, '-xr', rml_file])
-    if request_data.owlData:
-        open(owl_file, 'w', encoding='utf-8').write(request_data.owlData)
-        args.extend(['-o', owl_file])
-    if request_data.xsdData:
-        open(xsd_file, 'w').write(request_data.xsdData)
-        args.extend(['-x', xsd_file])
-    main(args)
-    output = rdflib.Graph().parse(output_file, format="turtle")
-    shutil.rmtree(temp_folder)
-    return JSONResponse(content={"shacl_output": output.serialize(format="turtle")})
+        if request_data.rmlData:
+            rdflib.Graph().parse(data=request_data.rmlData, format="turtle").serialize(destination=rml_file, format="turtle")
+            args.extend(['-m', rml_file, '-xr', rml_file])
+        if request_data.owlData:
+            open(owl_file, 'w', encoding='utf-8').write(request_data.owlData)
+            args.extend(['-o', owl_file])
+        if request_data.xsdData:
+            open(xsd_file, 'w').write(request_data.xsdData)
+            args.extend(['-x', xsd_file])
+        main(args)
+        output = rdflib.Graph().parse(output_file, format="turtle")
+        shutil.rmtree(temp_folder)
+        return JSONResponse(content={"shacl_output": output.serialize(format="turtle")})
 
 
-    # except Exception as e:
-    #     return JSONResponse(content={"error": str(e)}, status_code=500)
+    except Exception as e:
+        return JSONResponse(content={"error": str(e)}, status_code=500)
 
 class IntegrationRequest(BaseModel):
     shacl1Data: str = None
