@@ -42,6 +42,11 @@ async def index():
     # Return the index.html file
     return FileResponse("static/index.html", media_type="text/html")
 
+@app.get("/video")
+async def video():
+    # Return the index.html file
+    return FileResponse("static/video.html", media_type="text/html")
+
 class TranslationRequest(BaseModel):
     rmlData: str = None
     owlData: str = None
