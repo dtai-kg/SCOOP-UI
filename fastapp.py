@@ -118,13 +118,12 @@ class IntegrationRequest(BaseModel):
 async def integrate(request_data: IntegrationRequest):
     
     try:
-        temp_folder = tempfile.mkdtemp()
-        output_file = os.path.join(temp_folder, "output.ttl")
-
-        priority = ["SHACL Shapes 1", "SHACL Shapes 2"]
-        shapes_graph = []
-
         if request_data.shacl1Data and request_data.shacl2Data:
+            temp_folder = tempfile.mkdtemp()
+            output_file = os.path.join(temp_folder, "output.ttl")
+
+            priority = ["SHACL Shapes 1", "SHACL Shapes 2"]
+            shapes_graph = []
             for p in priority:
                 if p=="SHACL Shapes 1" and request_data.shacl1Data:
                     shapes_graph.append(rdflib.Graph().parse(data=request_data.shacl1Data, format="turtle"))

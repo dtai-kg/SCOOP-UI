@@ -50,8 +50,8 @@
 												<h5 style="margin-top: -18px; font-weight: bold;">Input: Raw Data Schemas</h5>
 												<select id="exampleSelect" onchange="xsdLoadExample(this.value)">
 													<option value="">Select an example...</option>
-													<option value="student.xsd">student.xsd</option>
-													<!-- Add more options for other examples if needed -->
+													<option value="student.xsd.xml">Student</option>
+													<option value="rinf.xsd.xml">RINF</option>
 												</select>
 											</div>
 											<textarea id="xsdText" type="text" placeholder="XML Schemas" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
@@ -63,8 +63,8 @@
 												<h5 style="margin-top: -18px; margin-right: 65px;  font-weight: bold;">Input: Mapping Rules</h5>
 												<select id="exampleSelect" onchange="rmlLoadExample(this.value)">
 													<option value="">Select an example...</option>
-													<option value="student.rml.ttl">student.rml.ttl</option>
-													<!-- Add more options for other examples if needed -->
+													<option value="student.rml.ttl">Student</option>
+													<option value="rinf.rml.ttl">RINF</option>
 												</select>
 											</div>
 											<textarea id="rmlText" placeholder="RML Mapping Rules" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
@@ -76,8 +76,8 @@
 												<h5 style="margin-top: -18px; font-weight: bold;">Input: Ontologies</h5>
 												<select id="exampleSelect" onchange="owlLoadExample(this.value)">
 													<option value="">Select an example...</option>
-													<option value="student.owl">student.owl</option>
-													<!-- Add more options for other examples if needed -->
+													<option value="student.ontology.ttl">Student</option>
+													<option value="rinf.ontology.ttl">RINF</option>
 												</select>
 											</div>
 											<textarea id="owlText" placeholder="OWL" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
@@ -103,7 +103,7 @@
 												<h2>Configurations</h2>
 												<form id="settingsForm">
 													<input type="radio" id="priority" name="mode" value="priority" checked>
-													<label for="priority">SCOOP-Prior</label><br>
+													<label for="priority">Keep Non-Conflict Constraints Based on Priority</label><br>
 													<div id="priorityOptions" style="display: none; display: flex;">
 														<i style="font-size:medium;">Drage to change priority:&nbsp;&nbsp;</i>
 														<div class="priorityOption" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -117,7 +117,7 @@
 														</div>
 													</div>
 													<input type="radio" id="priority-r" name="mode" value="priorityR">
-													<label for="priority-r">SCOOP-Prior-R</label><br>
+													<label for="priority-r">Keep Non-Conflict Constraints and Remove Redundant Shapes Based on Priority</label><br>
 													<div id="priorityROptions" style="display: none; display: flex;">
 														<i style="font-size: medium;">Drag to change priority:&nbsp;&nbsp;</i>
 														<div class="priorityOption" ondrop="drop(event)" ondragover="allowDrop(event)">
@@ -131,7 +131,7 @@
 														</div>
 													</div>
 													<input type="radio" id="all" name="mode" value="all">
-													<label for="all">SCOOP-All</label><br>
+													<label for="all">Keep All Constraints</label><br>
 													<button type="button" id="saveButton">Save</button>
 												</form>
 											</div>
@@ -198,11 +198,11 @@
 												<h2>Configurations</h2>
 												<form id="settingsForm_integ">
 													<input type="radio" id="priority_integ" name="mode_integ" value="priority" checked>
-													<label for="priority_integ">SCOOP-Prior</label><br>
+													<label for="priority_integ">Keep Non-Conflict Constraints</label><br>
 													<input type="radio" id="priority-r_integ" name="mode_integ" value="priorityR">
-													<label for="priority-r_integ">SCOOP-Prior-R</label><br>
+													<label for="priority-r_integ">Keep Non-Conflict Constraints and Remove Redundant Shapes</label><br>
 													<input type="radio" id="all_integ" name="mode_integ" value="all">
-													<label for="all_integ">SCOOP-All</label><br>
+													<label for="all_integ">Keep All Constraints</label><br>
 													<button type="button" id="saveButton_integ">Save</button>
 												</form>
 											</div>
@@ -239,7 +239,7 @@
 									<h3 style="text-align: left; font-weight: bold">Configurations</h3>
 									
 									<ul style="text-align: left;">
-									  <li><strong>Integration Strategies:</strong> Select one from three integration strategies: SCOOP-All, SCOOP-Prior, and SCOOP-Prior-R. The adoption of different strategies influences the resolution of conflicting constraints.</li>
+									  <li><strong>Integration Strategies:</strong> Select one from three integration strategies: Keep All Constraints using Logical Constraint sh:or (SCOOP-All), Keep Non-Conflict Constraints Based on Priority (SCOOP-Prior), and Keep Non-Conflict Constraints and Remove Redundant Shapes Based on Priority (SCOOP-Prior-R). The adoption of different strategies influences the resolution of conflicting constraints.</li>
 									  
 									  <li><strong>Integration Priorities:</strong> Easily rearrange and prioritize your SHACL shapes integration using simple drag-and-drop functionality.</li>
 									</ul>
@@ -247,7 +247,6 @@
 									<h3 style="text-align: left; font-weight: bold">How to Use</h3>
 									
 									<ol style="text-align: left;">
-									  <li><strong>Access SCOOP-UI:</strong> Visit the provided URL and start shaping your data immediately.</li>
 									  
 									  <li><strong>Input Data:</strong> Enter the text box, upload a file, or click on a predefined example.</li>
 									  
@@ -257,12 +256,12 @@
 									</ol>
 									
 								</div>
-									<!-- <footer class="major">
+
+									<footer class="major">
 									<ul class="actions special">
-										<li><a href="generic.html" class="button primary">Get Started</a></li>
-										<li><a href="generic.html" class="button">Learn More</a></li>
+										<li><a href="video.html" class="button primary">Demo Video</a></li>
 									</ul>
-								</footer> -->
+								</footer>
 							</section>
 
 					</div>

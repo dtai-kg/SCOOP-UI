@@ -1,0 +1,217 @@
+@prefix : <http://data.europa.eu/949/> .
+@prefix cc: <http://creativecommons.org/ns#> .
+@prefix vs: <http://www.w3.org/2003/06/sw-vocab-status/ns#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix era: <http://data.europa.eu/949/> .
+@prefix gsp: <http://www.opengis.net/ont/geosparql#> .
+@prefix org: <http://www.w3.org/ns/org#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix wgs: <http://www.w3.org/2003/01/geo/wgs84_pos#> .
+@prefix xml: <http://www.w3.org/XML/1998/namespace> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+@prefix schema: <https://schema.org/> .
+@prefix scheme: <http://data.europa.eu/949/schemes/> .
+@prefix opTypes: <http://data.europa.eu/949/concepts/op-types/> .
+@prefix osmClass: <http://data.europa.eu/949/concepts/osmClass/> .
+@base <http://data.europa.eu/949/> .
+
+<http://data.europa.eu/949/> rdf:type owl:Ontology ;
+                              owl:imports gsp: ;
+                              cc:license <https://creativecommons.org/licenses/by/4.0/> ;
+                              dct:author "Edna Ruckhaus" ,
+                                         "Oscar Corcho" ;
+                              dct:contributor <https://dylanvanassche.be/#me> ,
+                                              <https://julianrojas.org/#me> ,
+                                              <https://pietercolpaert.be/#me> ,
+                                              "Ivo Velitchkov" ,
+                                              "Marina Aguado" ,
+                                              "Polymnia Vasilopoulou" ,
+                                              "Wouter Beek" ;
+                              dct:issued "2020-07-29"^^xsd:date ;
+                              dct:modified "2023-04-05"^^xsd:date ;
+                              dct:publisher "European Union Agency for Railways" ;
+                              dct:title "ERA vocabulary"@en ;
+                              rdfs:label "ERA vocabulary"@en ;
+                              owl:priorVersion "https://git.fpfis.eu/datateam/ERA/era-vocabulary/-/releases/v3.0.0"^^xsd:anyURI ;
+                              owl:versionInfo "v3.0.1"^^xsd:string ;
+                              owl:versionURI "https://git.fpfis.eu/datateam/ERA/era-vocabulary/-/releases/v3.0.1"^^xsd:anyURI .
+
+###  http://data.europa.eu/949/platformId
+era:platformId rdf:type owl:DatatypeProperty ,
+                        owl:FunctionalProperty ;
+               rdfs:domain era:Platform ;
+               rdfs:range xsd:string ;
+               era:appendixD2Index "2.3.5" ;
+               era:rinfIndex "1.2.1.0.6.2" ;
+               dct:created "2021-09-13"^^xsd:date ;
+               dct:modified "2023-03-14"^^xsd:date ;
+               dct:source <https://eur-lex.europa.eu/eli/reg_impl/2019/773/oj> ;
+               rdfs:isDefinedBy <http://data.europa.eu/949/> ;
+               rdfs:label "Platform id"@en ;
+               vs:term_status "stable" .
+
+###  http://data.europa.eu/949/Platform
+era:Platform rdf:type owl:Class ;
+             rdfs:subClassOf era:InfrastructureObject ;
+             era:rinfIndex "1.2.1.0.6" ;
+             dct:created "2021-08-02"^^xsd:date ;
+             dct:modified "2022-07-07"^^xsd:date ;
+             rdfs:isDefinedBy <http://data.europa.eu/949/> ;
+             rdfs:label "Platform"@en ;
+             vs:term_status "stable" .
+
+era:InfrastructureObject rdf:type owl:Class ;
+                         rdfs:subClassOf era:Feature ;
+                         dct:created "2022-07-07" ;
+                         dct:modified "2022-10-27"^^xsd:date ;
+                         rdfs:label "Infrastructure object"@en ;
+                         rdfs:seeAlso <https://wiki3.railml.org/DataModel/3.2/IS/EARoot/EA246.htm> .
+
+era:Feature rdf:type owl:Class ;
+            rdfs:subClassOf gsp:Feature ;
+            dct:created "2022-07-07"@en ;
+            dct:modified "2022-10-27"^^xsd:date ;
+            rdfs:isDefinedBy <http://data.europa.eu/949/> ;
+            rdfs:label "ERA Feature"@en .
+
+###  http://www.opengis.net/ont/geosparql#Feature
+gsp:Feature rdf:type owl:Class .
+
+###  http://data.europa.eu/949/validityStartDate
+era:validityStartDate rdf:type owl:DatatypeProperty ;
+                      rdfs:domain era:InfrastructureObject ;
+                      rdfs:range xsd:date ;
+                      dct:created "2022-10-20"^^xsd:date ;
+                      rdfs:isDefinedBy "http://data.europa.eu/949/"^^xsd:anyURI ;
+                      rdfs:label "Validity start date"@en ;
+                      vs:term_status "stable" .
+
+###  http://data.europa.eu/949/InfrastructureObject
+era:InfrastructureObject rdf:type owl:Class ;
+                         rdfs:subClassOf era:Feature ;
+                         dct:created "2022-07-07" ;
+                         dct:modified "2022-10-27"^^xsd:date ;
+                         rdfs:isDefinedBy <http://data.europa.eu/949/> ;
+                         rdfs:label "Infrastructure object"@en ;
+                         rdfs:seeAlso <https://wiki3.railml.org/DataModel/3.2/IS/EARoot/EA246.htm> .
+
+###  http://data.europa.eu/949/validityEndDate
+era:validityEndDate rdf:type owl:DatatypeProperty ;
+                    rdfs:domain era:InfrastructureObject ;
+                    rdfs:range xsd:date ;
+                    dct:created "2022-10-19"^^xsd:date ;
+                    rdfs:comment "Defines the validity end date (e.g., an operational point that is not valid anymore), so that it is possible to filter out those that are not applicable for a specific application (e.g., for route planning)"@en ;
+                    rdfs:isDefinedBy "http://data.europa.eu/949/"^^xsd:anyURI ;
+                    rdfs:label "Validity end date"@en ;
+                    vs:term_status "stable" .
+
+###  http://data.europa.eu/949/Platform
+era:Platform rdf:type owl:Class ;
+             rdfs:subClassOf era:InfrastructureObject ;
+             era:rinfIndex "1.2.1.0.6" ;
+             dct:created "2021-08-02"^^xsd:date ;
+             dct:modified "2022-07-07"^^xsd:date ;
+             rdfs:comment "Platform for the purpose of RINF is understood as a platform edge. A platform concerns only the part of the structure neighbouring to the track (interfaced with trains)."@en ;
+             rdfs:isDefinedBy <http://data.europa.eu/949/> ;
+             rdfs:label "Platform"@en ;
+             rdfs:seeAlso <https://wiki3.railml.org/DataModel/3.2/IS/EARoot/EA250.htm> ;
+             vs:term_status "stable" .
+
+###  http://data.europa.eu/949/tenClassification
+era:tenClassification rdf:type owl:ObjectProperty ;
+                      rdfs:domain [ rdf:type owl:Class ;
+                                    owl:unionOf ( era:Platform
+                                                  era:Siding
+                                                  era:Track
+                                                )
+                                  ] ;
+                      rdfs:range skos:Concept ;
+                      era:inSkosConceptScheme <http://data.europa.eu/949/concepts/ten-classifications/TENClassifications> ;
+                      era:rinfIndex "1.1.1.1.2.1" ,
+                                    "1.2.1.0.2.1" ,
+                                    "1.2.1.0.6.3" ,
+                                    "1.2.2.0.0.3" ;
+                      dct:created "2021-08-02"^^xsd:date ;
+                      dct:modified "2021-09-10"^^xsd:date ;
+                      rdfs:comment "Indication of the part of the trans-European network the line belongs to. The allowed values for this property belong to the SKOS Concept Scheme http://data.europa.eu/949/concepts/ten-classifications/TENClassifications."@en ;
+                      rdfs:isDefinedBy <http://data.europa.eu/949/> ;
+                      rdfs:label "TEN classification (of track, of platform, of siding)"@en ;
+                      vs:term_status "stable" .
+
+###  http://data.europa.eu/949/length
+era:length rdf:type owl:DatatypeProperty ,
+                    owl:FunctionalProperty ;
+           rdfs:domain era:Feature ;
+           rdfs:range xsd:double ;
+           era:appendixD2Index "2.3.6" ;
+           era:eratvIndex "4.8.1" ;
+           era:rinfIndex "1.1.0.0.0.5" ,
+                         "1.1.1.1.8.12.1" ,
+                         "1.1.1.1.8.13.1" ,
+                         "1.1.1.1.8.7" ,
+                         "1.1.1.3.14.5" ,
+                         "1.2.1.0.5.10.1" ,
+                         "1.2.1.0.5.11.1" ,
+                         "1.2.1.0.5.5" ,
+                         "1.2.1.0.6.4" ,
+                         "1.2.2.0.2.1" ,
+                         "1.2.2.0.5.10.1" ,
+                         "1.2.2.0.5.5" ,
+                         "1.2.2.0.5.9.1" ;
+           era:usedInRCCCalculations "true"^^xsd:boolean ;
+           dct:created "2021-04-01"^^xsd:date ;
+           dct:modified "2021-08-11"^^xsd:date ;
+           dct:source <https://eur-lex.europa.eu/eli/reg_impl/2019/773/oj> ;
+           rdfs:comment """Length of a physical object, which can be a section of line, a tunnel, a platform, etc.
+Length of section of line (1.1.0.0.0.5), length between operational points at start and end of section of line.
+In https://eur-lex.europa.eu/eli/reg_impl/2019/773/oj 2.3.6 Length of platforms."""@en ;
+           rdfs:isDefinedBy <http://data.europa.eu/949/> ;
+           rdfs:label "Length"@en ;
+           vs:term_status "stable" .
+
+###  http://data.europa.eu/949/platformHeight
+era:platformHeight rdf:type owl:ObjectProperty ,
+                            owl:FunctionalProperty ;
+                   rdfs:domain era:Platform ;
+                   rdfs:range skos:Concept ;
+                   era:appendixD2Index "2.3.7" ;
+                   era:inSkosConceptScheme <http://data.europa.eu/949/concepts/platform-heights/PlatformHeights> ;
+                   era:rinfIndex "1.2.1.0.6.5" ;
+                   era:usedInRCCCalculations "true"^^xsd:boolean ;
+                   dct:created "2021-08-02"^^xsd:date ;
+                   dct:modified "2021-08-02"^^xsd:date ;
+                   dct:source <https://eur-lex.europa.eu/eli/reg_impl/2019/773/oj> ;
+                   rdfs:comment """Distance between the upper surface of platform and running surface of the neighbouring track. It is the nominal value expressed in millimetres. The allowed values for this property belong to the SKOS Concept Scheme http://data.europa.eu/949/concepts/platform-heights/PlatformHeights
+In https://eur-lex.europa.eu/eli/reg_impl/2019/773/oj 2.3.7 Height of platforms."""@en ;
+                   rdfs:isDefinedBy <http://data.europa.eu/949/> ;
+                   rdfs:label "Height of platform"@en ;
+                   vs:term_status "stable" .
+
+###  http://data.europa.eu/949/assistanceStartingTrain
+era:assistanceStartingTrain rdf:type owl:DatatypeProperty ,
+                                     owl:FunctionalProperty ;
+                            rdfs:domain era:Platform ;
+                            rdfs:range xsd:boolean ;
+                            era:rinfIndex "1.2.1.0.6.6" ;
+                            dct:created "2021-08-02"^^xsd:date ;
+                            dct:modified "2021-08-02"^^xsd:date ;
+                            rdfs:comment "Indication of existence of equipment or staff supporting the train crew in starting the train."@en ;
+                            rdfs:isDefinedBy <http://data.europa.eu/949/> ;
+                            rdfs:label "Existence of platform assistance for starting train"@en ;
+                            vs:term_status "stable" .
+
+###  http://data.europa.eu/949/assistanceStartingTrain
+era:assistanceStartingTrain rdf:type owl:DatatypeProperty ,
+                                     owl:FunctionalProperty ;
+                            rdfs:domain era:Platform ;
+                            rdfs:range xsd:boolean ;
+                            era:rinfIndex "1.2.1.0.6.6" ;
+                            dct:created "2021-08-02"^^xsd:date ;
+                            dct:modified "2021-08-02"^^xsd:date ;
+                            rdfs:comment "Indication of existence of equipment or staff supporting the train crew in starting the train."@en ;
+                            rdfs:isDefinedBy <http://data.europa.eu/949/> ;
+                            rdfs:label "Existence of platform assistance for starting train"@en ;
+                            vs:term_status "stable" .

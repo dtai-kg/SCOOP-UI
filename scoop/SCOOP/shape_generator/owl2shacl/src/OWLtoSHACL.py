@@ -18,6 +18,7 @@ def translateFromUrl(ontology, output_file="output.ttl"):
 
 def translateFromFile(ontology, output_file="output.ttl"):
 
+    ontology = rdflib.Graph().parse(ontology, format="turtle").serialize(format="turtle")
 
     onto = {
     "ontology": ontology,
@@ -34,8 +35,8 @@ def translateByJar(ontology, output_file="output.ttl"):
 
 
 
-    AstreaKG = f"{os.path.dirname(os.path.dirname(__file__))}\src\Astrea-KG.ttl"
-    astreajarpath = f"{os.path.dirname(os.path.dirname(__file__))}\src\Astrea2SHACL.jar"
+    AstreaKG = f"{os.path.dirname(os.path.dirname(__file__))}/src/Astrea-KG.ttl"
+    astreajarpath = f"{os.path.dirname(os.path.dirname(__file__))}/src/Astrea2SHACL.jar"
     # ontology = f"{os.path.dirname(os.path.dirname(__file__))}\..\..\..\..\{ontology}"
     
     subprocesscommand = ['java', '-jar', astreajarpath, AstreaKG, ontology]
