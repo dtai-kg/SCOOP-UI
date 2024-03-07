@@ -28,7 +28,7 @@ Visit our web application at [SCOOP-UI](#) and get started instantly.
 
 ### Installation Steps incase you want to run locally
 
-- Java Runtime Environment (JRE) - Version 8 or higher
+- Java Runtime Environment (JRE) 
 - Python Environment - Version 3.8 or higher
 
 1. **Install Java Runtime Environment (JRE)**:
