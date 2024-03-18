@@ -6,7 +6,7 @@ This repository demonstrates how to quickly extract and integrate SHACL shapes u
 
 ➡️ **Access SCOOP-UI**
 
-Visit our web application at [SCOOP-UI](https://github.com/dtai-kg/SCOOP-UI) and get started instantly.
+Visit our web application at [SCOOP-UI](https://demos.citius.usc.es/scoop/) and get started instantly.
 
 ### Features
 
