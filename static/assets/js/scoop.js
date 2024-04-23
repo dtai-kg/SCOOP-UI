@@ -1,3 +1,5 @@
+var fileContents = {"rmlText":[], "owlText":[], "xsdText":[]};
+
 function xsdLoadExample(exampleName) {
 
     if (exampleName) {
@@ -13,7 +15,7 @@ function xsdLoadExample(exampleName) {
         xhttp.send();
     } else {
 
-        document.getElementById("xsdText").value = "";
+        // document.getElementById("xsdText").value = "";
     }
 }
 
@@ -32,7 +34,7 @@ function rmlLoadExample(exampleName) {
         xhttp.send();
     } else {
 
-        document.getElementById("rmlText").value = "";
+        // document.getElementById("rmlText").value = "";
     }
 }
 
@@ -51,7 +53,7 @@ function owlLoadExample(exampleName) {
         xhttp.send();
     } else {
 
-        document.getElementById("owlText").value = "";
+        // document.getElementById("owlText").value = "";
     }
 }
 
@@ -93,53 +95,113 @@ function shacl2LoadExample(exampleName) {
     }
 }
 
+// function handleFileUpload(input) {
+//     const file = input.files[0];
+//     const reader = new FileReader();
+//     reader.onload = function(e) {
+//         const textAreaId = input.id.replace('File', '');
+//         document.getElementById(textAreaId).value = e.target.result;
+//     }
+//     reader.readAsText(file);
+// }
+
+
+
 function handleFileUpload(input) {
-    const file = input.files[0];
-    const reader = new FileReader();
-    reader.onload = function(e) {
-        const textAreaId = input.id.replace('File', '');
-        document.getElementById(textAreaId).value = e.target.result;
+    const files = input.files;
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const textAreaId = input.id.replace('File', '');
+            fileContents[textAreaId].push(e.target.result);
+            // console.log('Current data:', fileContents[textAreaId]);
+        }
+        reader.readAsText(file);
     }
-    reader.readAsText(file);
 }
 
+// function clearTextArea(textAreaId) {
+//     document.getElementById(textAreaId).value = '';
+// }
 function clearTextArea(textAreaId) {
     document.getElementById(textAreaId).value = '';
+    fileContents[textAreaId] = [];
+    var fileInputId = textAreaId.replace('Text', 'TextFile');
+    var fileInput = document.getElementById(fileInputId);
+    if (fileInput) {
+        fileInput.value = ''; 
+        if (fileInput.files.length > 0) {
+            fileInput.files = []; 
+        }
+    }
 }
+
+function downloadShaclOutput(shaclid) {
+    var blob = new Blob([document.getElementById(shaclid).value], { type: 'text/turtle' });
+
+    var downloadLink = document.createElement('a');
+    downloadLink.href = window.URL.createObjectURL(blob);
+    downloadLink.download = 'shacl.ttl'; 
+    downloadLink.click();
+}
+
 
 const loadingSpinner = document.getElementById('loadingSpinner');
 
 function translateIt() {
-    loadingSpinner.style.display = 'block';
+    document.getElementById('shaclOutput').innerText = '';
+    document.getElementById('shaclOutput').style.color = 'black';
     var selectedOptions = document.querySelectorAll('input[name="mode"]:checked');
     var priorityOrder = Array.from(document.querySelectorAll('.priorityButton')).map(function(button) {
         return button.id;
     });
    
+    if (document.getElementById('rmlText').value.trim() !== "") {
+        fileContents['rmlText'].push(document.getElementById('rmlText').value);
+    }
+    
+    if (document.getElementById('owlText').value.trim() !== "") {
+        fileContents['owlText'].push(document.getElementById('owlText').value);
+    }
+    
+    if (document.getElementById('xsdText').value.trim() !== "") {
+        fileContents['xsdText'].push(document.getElementById('xsdText').value);
+    }
+    
+
     var requestData = {
-        rmlData: document.getElementById('rmlText').value,
-        owlData: document.getElementById('owlText').value,
-        xsdData: document.getElementById('xsdText').value,
+        rmlData: fileContents['rmlText'],
+        owlData: fileContents['owlText'],
+        xsdData: fileContents['xsdText'],
         mode: selectedOptions[0].value, 
         priority: priorityOrder.join(' ')
     };
-
-    fetch('/translate', { 
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json' 
-        },
-        body: JSON.stringify(requestData) 
-    })
-    .then(response => response.json())
-    .then(data => {
-        document.getElementById('shaclOutput').value = data.shacl_output;
-        loadingSpinner.style.display = 'none';
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        loadingSpinner.style.display = 'none';
-    });   
+    
+    var isEmpty = requestData.rmlData.length === 0 && requestData.owlData.length === 0 && requestData.xsdData.length === 0;
+    
+    if (isEmpty) {
+        document.getElementById('shaclOutput').style.color = 'red';
+        document.getElementById('shaclOutput').innerText = 'Please input data before translating!';
+    } else {
+        loadingSpinner.style.display = 'block';
+        fetch('/translate', { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json' 
+            },
+            body: JSON.stringify(requestData) 
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('shaclOutput').value = data.shacl_output;
+            loadingSpinner.style.display = 'none';
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            loadingSpinner.style.display = 'none';
+        });
+    }
 }
 
 

@@ -619,6 +619,6 @@ class ShapeAdjustment:
                      inference='rdfs', abort_on_first=False, meta_shacl=False, debug=False)
         if not r[0]:
             print(r[2])
-        else:
-            print("Saved to adjusted SHACL shapes to file", output_file)
+        # else:
+            # print("Saved to adjusted SHACL shapes to file", output_file)
         self.adjusted_graph.serialize(destination=output_file, format='turtle')

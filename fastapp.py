@@ -48,32 +48,28 @@ async def video():
     return FileResponse("static/video.html", media_type="text/html")
 
 class TranslationRequest(BaseModel):
-    rmlData: str = None
-    owlData: str = None
-    xsdData: str = None
+    rmlData: list = []
+    owlData: list = []
+    xsdData: list = []
     mode : str = None
     priority : str = None
 
 
 @app.post("/translate")
 async def translate(request_data: TranslationRequest):
-    
     try:
-        # create temp folder
+    # create temp folder
         temp_folder = tempfile.mkdtemp()
         
         # make subfolders
         inputrml_folder = os.path.join(temp_folder, "inputrml")
         os.makedirs(inputrml_folder)
-        rml_file = os.path.join(inputrml_folder, "rml.ttl")
 
         inputowl_folder = os.path.join(temp_folder, "inputowl")
         os.makedirs(inputowl_folder)
-        owl_file = os.path.join(inputowl_folder, "owl.txt")
 
         inputxsd_folder = os.path.join(temp_folder, "inputxsd") 
         os.makedirs(inputxsd_folder)
-        xsd_file = os.path.join(inputxsd_folder, "xsd.xml")
 
         tempshacl_folder = os.path.join(temp_folder, "tempshacl")
         os.makedirs(tempshacl_folder)
@@ -92,19 +88,26 @@ async def translate(request_data: TranslationRequest):
             priority = [i.replace("-r","") for i in priority if "-r" in i]
         elif request_data.mode == "priority":
             priority = [i for i in priority if "-r" not in i]
-        
+
         args.append('--priority')
         args.extend(priority)
 
-        if request_data.rmlData:
-            rdflib.Graph().parse(data=request_data.rmlData, format="turtle").serialize(destination=rml_file, format="turtle")
-            args.extend(['-m', rml_file, '-xr', rml_file])
-        if request_data.owlData:
-            open(owl_file, 'w', encoding='utf-8').write(request_data.owlData)
-            args.extend(['-o', owl_file])
-        if request_data.xsdData:
-            open(xsd_file, 'w').write(request_data.xsdData)
-            args.extend(['-x', xsd_file])
+        if request_data.rmlData!=[]:
+            for index, data in enumerate(request_data.rmlData):
+                rml_file = os.path.join(inputrml_folder, f"rml{index}.ttl")
+                rdflib.Graph().parse(data=data, format="turtle").serialize(destination=rml_file, format="turtle")
+            args.extend(['-m', inputrml_folder, '-xr', inputrml_folder])
+        if request_data.owlData!=[]:
+            for index, data in enumerate(request_data.owlData):
+                owl_file = os.path.join(inputowl_folder, f"owl{index}.txt")
+                open(owl_file, 'w', encoding='utf-8').write(data)
+            args.extend(['-o', inputowl_folder])
+        if request_data.xsdData!=[]:
+            for index, data in enumerate(request_data.xsdData):
+                xsd_file = os.path.join(inputxsd_folder, f"xsd{index}.xsd")  
+                print("data",data)
+                open(xsd_file, 'w').write(data)
+            args.extend(['-x', inputxsd_folder])
         main(args)
         output = rdflib.Graph().parse(output_file, format="turtle")
         shutil.rmtree(temp_folder)

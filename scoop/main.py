@@ -29,13 +29,13 @@ def extract_shape_rml(rml_files,tempshacl_folder):
         # shacl_file = f'temp/rml{i}.ttl'
         shacl_file = os.path.join(tempshacl_folder, f'rml{i}.ttl')
         try:
-            print("Translating RML file ", mapping_file)
+            # print("Translating RML file ", mapping_file)
             RtoS = RMLtoSHACL()
             RtoS.evaluate_file(mapping_file,shacl_file)
             shacl_files.append(shacl_file)
         except:
             print("Error translating RML file ", mapping_file)
-    print("=======Stored RML-driven SHACL shapes in ", shacl_files)
+    # print("=======Stored RML-driven SHACL shapes in ", shacl_files)
     return shacl_files
 
 
@@ -51,7 +51,7 @@ def extract_shape_ontology(owl_files,tempshacl_folder):
             print("Error translating ontology to SHACL shape by JAR, trying REST API now")
             translateFromFile(owl_file, shacl_file)
         shacl_files.append(shacl_file)
-    print("=======Stored ontology-driven SHACL shapes in ", shacl_files)
+    # print("=======Stored ontology-driven SHACL shapes in ", shacl_files)
     return shacl_files
 
 def extract_shape_xsd(xsd_files,tempshacl_folder, rml_files=[]):
@@ -64,13 +64,13 @@ def extract_shape_xsd(xsd_files,tempshacl_folder, rml_files=[]):
             X2S = XSDtoSHACL()
             X2S.evaluate_file(xsd_file, shacl_file)
             if rml_files != []:
-                print("Start adjusting shape")
+                # print("Start adjusting shape")
                 sa = ShapeAdjustment("xml")
                 xsd_shape_g = Graph().parse(shacl_file, format='turtle')
                 sa.parseRawDataSchemaShape(xsd_shape_g)
                 for rml in rml_files:
                     try:
-                        print("Adjusting shape :", rml)
+                        # print("Adjusting shape :", rml)
                         rml_shape_g = Graph().parse(rml, format='turtle')
                         sa.parseRML(rml_shape_g)
                         sa.adjust(Graph()+xsd_shape_g)
@@ -80,14 +80,14 @@ def extract_shape_xsd(xsd_files,tempshacl_folder, rml_files=[]):
             shacl_files.append(shacl_file)
         except:
             print("Error translating XSD file :", xsd_file)
-    print("=======Stored XSD-driven SHACL shapes in ", shacl_files)
+    # print("=======Stored XSD-driven SHACL shapes in ", shacl_files)
     return shacl_files
 
 def integrate_shapes(shapes, output_file, mode):
     shapes_graph = []
     # validation_shape_graph = Graph().parse("shacl-shacl.ttl", format="turtle")
     for shape in shapes:
-        print("Start reading shape :", shape)
+        # print("Start reading shape :", shape)
         try:
             g = Graph().parse(shape, format='turtle')
         except:
@@ -97,28 +97,28 @@ def integrate_shapes(shapes, output_file, mode):
 
     # Shape integration
     if mode == 'priority':
-        print("Start integrating shapes with priority")
+        # print("Start integrating shapes with priority")
         start_time = time.time()
         shIn = ShapeIntegrationPriority(shapes_graph, output_file)
         shIn.integration()
-        print('Shape integration took %s seconds', time.time() - start_time)
-        print("Saved final file in ", output_file)
+        # print('Shape integration took %s seconds', time.time() - start_time)
+        # print("Saved final file in ", output_file)
 
     elif mode == 'priorityR':
-        print("Start integrating shapes with priority restricted")
+        # print("Start integrating shapes with priority restricted")
         start_time = time.time()
         shIn = ShapeIntegrationPriorityR(shapes_graph, output_file)
         shIn.integration()
-        print('Shape integration took %s seconds', time.time() - start_time)
-        print("Saved final file in ", output_file)
+        # print('Shape integration took %s seconds', time.time() - start_time)
+        # print("Saved final file in ", output_file)
 
     elif mode == 'all':
-        print("Start integrating shapes with all")
+        # print("Start integrating shapes with all")
         start_time = time.time()
         shIn = ShapeIntegrationAll(shapes_graph, output_file)
         shIn.integration()
-        print('Shape integration took %s seconds', time.time() - start_time)
-        print("Saved final file in ", output_file)
+        # print('Shape integration took %s seconds', time.time() - start_time)
+        # print("Saved final file in ", output_file)
 
 def extract_preliminary_shapes(args):
     # if not os.path.exists("temp"):
@@ -128,7 +128,7 @@ def extract_preliminary_shapes(args):
     shapes = []
     for p in args.priority:
         if p == 'rml' and args.mappings:
-            print("Start translating rml")
+            # print("Start translating rml")
             rml_files = []
             for rml in args.mappings:
                 if os.path.isdir(rml):
@@ -137,10 +137,10 @@ def extract_preliminary_shapes(args):
                     rml_files.append(rml)
             rml_shacl_files = extract_shape_rml(rml_files,tempshacl_folder)
             shapes.extend(rml_shacl_files)
-            print("Finish translating rml")
+            # print("Finish translating rml")
 
         elif p == 'ontology' and args.ontology:
-            print("Start translating ontology")
+            # print("Start translating ontology")
             owl_files = []
             for owl in args.ontology:
                 if os.path.isdir(owl):
@@ -149,10 +149,10 @@ def extract_preliminary_shapes(args):
                     owl_files.append(owl)
             owl_shacl_files = extract_shape_ontology(owl_files,tempshacl_folder)
             shapes.extend(owl_shacl_files)
-            print("Finish translating ontology")
+            # print("Finish translating ontology")
 
         elif p == 'xsd' and args.xsd:
-            print("Start translating xsd")
+            # print("Start translating xsd")
             xsd_files = []
             for xsd in args.xsd:
                 if os.path.isdir(xsd):
@@ -161,7 +161,7 @@ def extract_preliminary_shapes(args):
                     xsd_files.append(xsd)
      
             if args.xsd_rml:
-                print("Start translating rml for post-adjustment of XSD-driven shape")
+                # print("Start translating rml for post-adjustment of XSD-driven shape")
                 xsd_rml_files = []
                 for rml in args.xsd_rml:
                     if os.path.isdir(rml):
@@ -172,7 +172,7 @@ def extract_preliminary_shapes(args):
             else:
                 xsd_shacl_files = extract_shape_xsd(xsd_files,tempshacl_folder)
             shapes.extend(xsd_shacl_files)
-            print("Finish translating xsd")
+            # print("Finish translating xsd")
     return shapes
 
 def extractShape4Parallel(input_files:tuple):
@@ -180,18 +180,18 @@ def extractShape4Parallel(input_files:tuple):
     if file_type == 'rml':
         start_rml_time = time.time()
         shacl_files = extract_shape_rml(files)
-        print("RML2SHACL execution time: ", time.time() - start_rml_time)
+        # print("RML2SHACL execution time: ", time.time() - start_rml_time)
         return ['rml', shacl_files]
     elif file_type == 'ontology':
         start_ontology_time = time.time()
         shacl_files = extract_shape_ontology(files)
-        print("OWL2SHACL execution time: ", time.time() - start_ontology_time)
+        # print("OWL2SHACL execution time: ", time.time() - start_ontology_time)
         return ['ontology', shacl_files]
     elif file_type == 'xsd':
         files, rml_files = files
         start_xsd_time = time.time()
         shacl_files = extract_shape_xsd(files, rml_files)
-        print("XSD2SHACL execution time: ", time.time() - start_xsd_time)
+        # print("XSD2SHACL execution time: ", time.time() - start_xsd_time)
         return ['xsd', shacl_files]
 
 def extract_preliminary_shapes_parallel(args):
@@ -229,7 +229,7 @@ def extract_preliminary_shapes_parallel(args):
     # parallel
     mp_number = sum(1 for item in [args.mappings, args.ontology, args.xsd] if item is not None)
     pool = mp.Pool(processes=mp_number)   
-    print("Number of processes: ", mp_number)
+    # print("Number of processes: ", mp_number)
     results = pool.map(extractShape4Parallel, shapes)
     pool.close()
     pool.join()
@@ -258,13 +258,13 @@ def main(args):
 
     total_start_time = time.time()
     if args.parallel:
-        print("Start translating shapes in parallel...")
+        # print("Start translating shapes in parallel...")
         shapes = extract_preliminary_shapes_parallel(args)
     else:
-        print("Start translating shapes...")
+        # print("Start translating shapes...")
         shapes = extract_preliminary_shapes(args)
 
-    print("Start integrating shapes...")
+    # print("Start integrating shapes...")
     integrate_shapes(shapes, args.output, args.mode)
 
     total_end_time = time.time()    
@@ -273,4 +273,4 @@ def main(args):
     # for f in os.listdir("temp"):
     #     os.remove(os.path.join("temp", f))
 
-    print("Total time: ", total_end_time - total_start_time)
+    # print("Total time: ", total_end_time - total_start_time)

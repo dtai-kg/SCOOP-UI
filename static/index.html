@@ -56,7 +56,7 @@
 											</div>
 											<textarea id="xsdText" type="text" placeholder="XML Schemas" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
 											<div style="display: flex; align-items: center; justify-content: space-between">	
-												<input type="file" id="xsdTextFile" accept=".txt,.xml,.xsd" onchange="handleFileUpload(this)">
+												<input type="file" id="xsdTextFile" accept=".txt,.xml,.xsd" onchange="handleFileUpload(this)" multiple>
 												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('xsdText')">Clear</button>
 											</div>
 										</div>
@@ -72,7 +72,7 @@
 											</div>
 											<textarea id="rmlText" placeholder="RML Mapping Rules" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<input type="file" id="rmlTextFile" accept=".txt,.ttl" onchange="handleFileUpload(this)">
+												<input type="file" id="rmlTextFile" accept=".txt,.ttl" onchange="handleFileUpload(this)" multiple>
 												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('rmlText')">Clear</button>
 											</div>
 										</div>
@@ -88,7 +88,7 @@
 											</div>
 											<textarea id="owlText" placeholder="OWL" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<input type="file" id="owlTextFile" accept=".txt,.ttl,.owl,.nt" onchange="handleFileUpload(this)">
+												<input type="file" id="owlTextFile" accept=".txt,.ttl,.owl,.nt" onchange="handleFileUpload(this)" multiple>
 												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('owlText')">Clear</button>
 											</div>	
 										</div>
@@ -98,6 +98,7 @@
 										<h5 style="margin-top: -12px; font-weight: bold;">Output: SHACL Shapes</h5>
 										<textarea id="shaclOutput" placeholder="Integrated SHACL Shapes" style="width: 99.2%; height: 200px; margin-top: -5px; white-space: pre-wrap;"></textarea>
 									</div>
+									<button style="float: right; margin-right: 0.8%; padding-bottom: 2.2em; font-size: 0.6em; width: 6.6%; height: 1em;" onclick="downloadShaclOutput('shaclOutput')">Download</button>
 
 									<div>
 										<div id="loadingSpinner" style="display: none;" class="loader"></div>
@@ -198,7 +199,7 @@
 										<h5 style="margin-top: -12px; font-weight: bold;">Output: SHACL Shapes</h5>
 										<textarea id="shaclOutput_integ" placeholder="Integrated SHACL Shapes" style="width: 99.2%; height: 200px; margin-top: -5px; white-space: pre-wrap;"></textarea>
 									</div>
-									
+									<button style="float: right; margin-right: 0.8%; padding-bottom: 2.2em; font-size: 0.6em; width: 6.6%; height: 1em;" onclick="downloadShaclOutput('shaclOutput_integ')">Download</button>
 
 									<div>
 										<div id="loadingSpinner_integ" style="display: none;" class="loader"></div>

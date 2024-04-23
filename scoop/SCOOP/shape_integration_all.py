@@ -773,9 +773,9 @@ class ShapeIntegrationAll():
                 classes.add(o)
             elif p == self.shaclNS.path or p == self.shaclNS.targetSubjectsOf or p == self.shaclNS.targetObjectsOf:
                 properties.add(o)
-        print("STATS: ")
-        print("\t Number of classes: ", len(classes))
-        print("\t Number of properties: ", len(properties))
+        # print("STATS: ")
+        # print("\t Number of classes: ", len(classes))
+        # print("\t Number of properties: ", len(properties))
 
     def writeShapeToFile(self):
         self.STATS()
@@ -785,7 +785,7 @@ class ShapeIntegrationAll():
         if not r[0]:
             print(r[2])
         self.SHACL.serialize(destination=self.output, format='turtle')
-        print("Saved final file in ", self.output)
+        # print("Saved final file in ", self.output)
 
 if __name__ == "__main__":
 
