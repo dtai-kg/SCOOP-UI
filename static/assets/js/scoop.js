@@ -103,6 +103,10 @@ function handleFileUpload(input) {
     reader.readAsText(file);
 }
 
+function clearTextArea(textAreaId) {
+    document.getElementById(textAreaId).value = '';
+}
+
 const loadingSpinner = document.getElementById('loadingSpinner');
 
 function translateIt() {

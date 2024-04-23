@@ -1847,7 +1847,8 @@ input, select, textarea {
 		/* height: 2.75em; */
 		height: 2.5em;
 		line-height: 2.5em;
-		min-width: 9.25em;
+		/* min-width: 9.25em; */
+		min-width: 0em;
 		padding: 0 1.5em;
 		text-align: center;
 		text-decoration: none;
@@ -1959,7 +1960,7 @@ input, select, textarea {
 		input[type="button"].primary,
 		button.primary,
 		.button.primary {
-			background-color: #8cc9f0;
+			background-color: #1d8db0;
 			color: #ffffff !important;
 			box-shadow: none;
 		}
@@ -1969,7 +1970,7 @@ input, select, textarea {
 			input[type="button"].primary:hover,
 			button.primary:hover,
 			.button.primary:hover {
-				background-color: #9acff2;
+				background-color: #1d8db0;
 			}
 
 			input[type="submit"].primary:active,
@@ -1977,7 +1978,7 @@ input, select, textarea {
 			input[type="button"].primary:active,
 			button.primary:active,
 			.button.primary:active {
-				background-color: #7ec3ee;
+				background-color: #1d8db0;
 			}
 
 			input[type="submit"].primary.icon:before,
@@ -3909,3 +3910,16 @@ input, select, textarea {
 			width: 80px;
 			height: 30px;
 		}
+		clearButton {
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			border-radius: 5px;
+			background-image: -webkit-gradient(linear, left bottom, left top, color-stop(0.16, rgb(207, 207, 207)), color-stop(0.79, rgb(252, 252, 252)));
+			background-image: -moz-linear-gradient(center bottom, rgb(207, 207, 207) 16%, rgb(252, 252, 252) 79%);
+			background-image: linear-gradient(to top, rgb(207, 207, 207) 16%, rgb(252, 252, 252) 79%); 
+			padding: 3px;
+			border: 1px solid #000;
+			color: black;
+			text-decoration: none;
+			background-image: linear-gradient(to top, rgb(207, 207, 207) 16%, rgb(252, 252, 252) 79%);
+		  }

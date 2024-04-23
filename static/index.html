@@ -55,7 +55,10 @@
 												</select>
 											</div>
 											<textarea id="xsdText" type="text" placeholder="XML Schemas" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
-											<input type="file" id="xsdTextFile" accept=".txt,.xml,.xsd" onchange="handleFileUpload(this)">
+											<div style="display: flex; align-items: center; justify-content: space-between">	
+												<input type="file" id="xsdTextFile" accept=".txt,.xml,.xsd" onchange="handleFileUpload(this)">
+												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('xsdText')">Clear</button>
+											</div>
 										</div>
 
 										<div style="flex: 1; margin-right: 10px;">
@@ -68,7 +71,10 @@
 												</select>
 											</div>
 											<textarea id="rmlText" placeholder="RML Mapping Rules" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
-											<input type="file" id="rmlTextFile" accept=".txt,.ttl" onchange="handleFileUpload(this)">
+											<div style="display: flex; align-items: center; justify-content: space-between">
+												<input type="file" id="rmlTextFile" accept=".txt,.ttl" onchange="handleFileUpload(this)">
+												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('rmlText')">Clear</button>
+											</div>
 										</div>
 
 										<div style="flex: 1; margin-right: 10px;">
@@ -81,19 +87,22 @@
 												</select>
 											</div>
 											<textarea id="owlText" placeholder="OWL" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
-											<input type="file" id="owlTextFile" accept=".txt,.ttl,.owl,.nt" onchange="handleFileUpload(this)">
+											<div style="display: flex; align-items: center; justify-content: space-between">
+												<input type="file" id="owlTextFile" accept=".txt,.ttl,.owl,.nt" onchange="handleFileUpload(this)">
+												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('owlText')">Clear</button>
+											</div>	
 										</div>
 									</div>
 
 									<div style="margin-top: 20px;">
 										<h5 style="margin-top: -12px; font-weight: bold;">Output: SHACL Shapes</h5>
-										<textarea id="shaclOutput" placeholder="Integrated SHACL Shapes" style="width: 100%; height: 200px; margin-top: -5px; white-space: pre-wrap;"></textarea>
+										<textarea id="shaclOutput" placeholder="Integrated SHACL Shapes" style="width: 99.2%; height: 200px; margin-top: -5px; white-space: pre-wrap;"></textarea>
 									</div>
 
 									<div>
 										<div id="loadingSpinner" style="display: none;" class="loader"></div>
 										<ul class="actions">
-											<button id="translateButton" onclick="translateIt()" class="button primary">Translate to SHACL</button>
+											<button id="translateButton" onclick="translateIt()" class="button primary" style="background-color: #52bdec">Translate to SHACL</button>
 											<i id="settingsIcon" class="fas fa-cog" style="cursor: pointer; margin-left: 10px; vertical-align: middle;"></i>
 										</ul>
 									
@@ -162,7 +171,10 @@
 												</select>
 											</div>
 											<textarea id="shacl1Text" type="text" placeholder="SHACL shapes" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
-											<input type="file" id="shacl1TextFile" accept=".txt,.ttl,.nt" onchange="handleFileUpload(this)">
+											<div style="display: flex; align-items: center; justify-content: space-between">
+												<input type="file" id="shacl1TextFile" accept=".txt,.ttl,.nt" onchange="handleFileUpload(this)">
+												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('shacl1Text')">Clear</button>
+											</div>
 										</div>
 									
 										<div style="flex: 1; margin-right: 10px;">
@@ -175,20 +187,23 @@
 												</select>
 											</div>
 											<textarea id="shacl2Text" type="text" placeholder="SHACL shapes" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
-											<input type="file" id="shacl2TextFile" accept=".txt,.ttl,.nt" onchange="handleFileUpload(this)">
+											<div style="display: flex; align-items: center; justify-content: space-between">
+												<input type="file" id="shacl2TextFile" accept=".txt,.ttl,.nt" onchange="handleFileUpload(this)">
+												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('shacl1Text')">Clear</button>
+											</div>
 										</div>
 									</div>
 									
 									<div style="flex: 1; margin-top: 20px;">
 										<h5 style="margin-top: -12px; font-weight: bold;">Output: SHACL Shapes</h5>
-										<textarea id="shaclOutput_integ" placeholder="Integrated SHACL Shapes" style="width: 100%; height: 200px; margin-top: -5px; white-space: pre-wrap;"></textarea>
+										<textarea id="shaclOutput_integ" placeholder="Integrated SHACL Shapes" style="width: 99.2%; height: 200px; margin-top: -5px; white-space: pre-wrap;"></textarea>
 									</div>
 									
 
 									<div>
 										<div id="loadingSpinner_integ" style="display: none;" class="loader"></div>
 										<ul class="actions">
-											<button id="translateButton_integ" onclick="integrateIt()" class="button primary">Integrate SHACL</button>
+											<button id="translateButton_integ" onclick="integrateIt()" class="button primary" style="background-color: #52bdec">Integrate SHACL</button>
 											<i id="settingsIcon_integ" class="fas fa-cog" style="cursor: pointer; margin-left: 10px; vertical-align: middle;"></i>
 										</ul>
 									
