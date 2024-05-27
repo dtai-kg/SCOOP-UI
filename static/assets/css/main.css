@@ -3807,7 +3807,8 @@ input, select, textarea {
 		textarea {
 			color: black;
 			font-family: Arial, sans-serif;
-			font-size: 12px; 
+			font-size: 13px; 
+			background-color: white;
 		}
 
 		/* setting icon */

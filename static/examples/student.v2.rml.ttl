@@ -38,7 +38,7 @@ ex:StudentMapping a rr:TriplesMap;
     rr:predicate stu:id;
     rr:objectMap [
       rml:reference "id";
-      rr:datatype xsd:string
+      rr:datatype xsd:integer
     ]
   ].
 

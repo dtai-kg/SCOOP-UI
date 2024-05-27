@@ -78,7 +78,6 @@ async def translate(request_data: TranslationRequest):
         os.makedirs(tempoutput_folder)
         output_file = os.path.join(tempoutput_folder, "output.ttl")
 
-        print("mode",request_data.mode)
         args = ['-ot', output_file, '--tempshacl_folder', tempshacl_folder, '--mode', request_data.mode]
 
         priority = ["rml", "ontology", "xsd"]
@@ -105,8 +104,6 @@ async def translate(request_data: TranslationRequest):
         if request_data.xsdData!=[]:
             for index, data in enumerate(request_data.xsdData):
                 xsd_file = os.path.join(inputxsd_folder, f"xsd{index}.xsd")  
-                print("data",data)
-                open(xsd_file, 'w').write(data)
             args.extend(['-x', inputxsd_folder])
         main(args)
         output = rdflib.Graph().parse(output_file, format="turtle")
@@ -140,7 +137,6 @@ async def integrate(request_data: IntegrationRequest):
 
             shapes_graph[0] = (shapes_graph[0], "")
             shapes_graph[1] = (shapes_graph[1], "owl")
-            print("ssss",shapes_graph)
 
             if request_data.mode == "all":
                 shIn = ShapeIntegrationAll(shapes_graph, output_file)

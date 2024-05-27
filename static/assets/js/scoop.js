@@ -210,10 +210,14 @@ const loadingSpinner_integ = document.getElementById('loadingSpinner_integ');
 function integrateIt() {
     loadingSpinner_integ.style.display = 'block';
     var selectedOption_integ = document.querySelector('input[name="mode_integ"]:checked').value;
+    var priorityOrder = Array.from(document.querySelectorAll('.priorityButton')).map(function(button) {
+        return button.id;
+    });
     var requestData = {
         shacl1Data: document.getElementById('shacl1Text').value,
         shacl2Data: document.getElementById('shacl2Text').value,
-        mode: selectedOption_integ
+        mode: selectedOption_integ,
+        priority: priorityOrder.join(' ')
     };
     // console.log('Request data:', requestData);
     fetch('/integrate', { 

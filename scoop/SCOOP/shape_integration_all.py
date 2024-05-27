@@ -57,7 +57,6 @@ class ShapeIntegrationAll():
                         constraints_add = self.getConstraints(shape_add, identifier_add, NodeShapes_add)
                         # Add constraints in the shape that has target declaration
                         for constraint_add, constraint_add_value in constraints_add.items():
-                            # print("constraint_add: ", constraint_add, constraint_add_value)
                             if constraint_add_value == constraints_current.get(constraint_add, None):
                                 continue
                             else:
@@ -76,6 +75,7 @@ class ShapeIntegrationAll():
                                 for identifier_path_add in identifiers_path_add:
                                     constraints_current = self.getConstraints(self.SHACL, identifier_path_current, NodeShapes_current)
                                     constraints_add = self.getConstraints(shape_add, identifier_path_add, NodeShapes_add)
+                                    self.constraints_add = constraints_add
                                     # Add constraints in the shape that has property path
                                     for constraint_add, constraint_add_value in constraints_add.items():
                                         if constraint_add_value == constraints_current.get(constraint_add, None):
@@ -206,13 +206,15 @@ class ShapeIntegrationAll():
             or_constraints = {}
 
         if constraint_add == self.shaclNS["class"]:
-            self.SHACL.add((identifier_path_current, constraint_add, constraint_add_value))
+            if constraints_current.get(self.shaclNS.nodeKind, None) != self.shaclNS.Literal:
+                self.SHACL.add((identifier_path_current, constraint_add, constraint_add_value))
         
         elif constraint_add == self.shaclNS.nodeKind:
-            
-            if (constraints_current.get(self.shaclNS.nodeKind, None) == None) and (or_constraints.get(self.shaclNS.nodeKind, []) == []):
+            if constraints_current.get(self.shaclNS.nodeKind, None) == None:
                 # If there is no nodeKind in previous shape, need to check datatype also
                 if constraint_add_value == self.shaclNS.Literal:
+                    if constraints_current.get(self.shaclNS["class"], None) != None:
+                        self.SHACL.remove((identifier_path_current, self.shaclNS["class"], None))
                     self.SHACL.add((identifier_path_current, constraint_add, constraint_add_value))
                 elif ("IRI" in str(constraint_add_value)) or ("BlankNode" in str(constraint_add_value)):
                     if constraints_current.get(self.shaclNS.datatype, None) == None:
@@ -224,12 +226,16 @@ class ShapeIntegrationAll():
             elif or_node != None and (or_constraints.get(self.shaclNS.nodeKind, [])!=[]):
                 self.SHACL.remove((identifier_path_current, self.shaclNS["or"], or_node))
                 self.SHACL.add((bn0, self.shaclNS["or"], or_node))
+                
                 self.SHACL.add((bn1, constraint_add, constraint_add_value))
                 self.SHACL.add((identifier_path_current, self.shaclNS["or"], bn_rdflist))
                 self.transformList(bn_rdflist, [bn0, bn1])                
             else:  
                 self.SHACL.add((bn0, constraint_add, constraints_current.get(constraint_add)))
                 self.SHACL.add((bn1, constraint_add, constraint_add_value))
+                print(self.constraints_add)
+                if self.constraints_add.get(self.shaclNS["class"], None) != None:
+                    self.SHACL.add((bn1, self.shaclNS["class"], self.constraints_add.get(self.shaclNS["class"])))
                 self.SHACL.remove((identifier_path_current, constraint_add, constraints_current.get(constraint_add)))
                 self.SHACL.add((identifier_path_current, self.shaclNS["or"], bn_rdflist))
                 self.transformList(bn_rdflist, [bn0, bn1])

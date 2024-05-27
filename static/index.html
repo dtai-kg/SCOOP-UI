@@ -47,14 +47,14 @@
 
 										<div style="flex: 1; margin-right: 10px;">
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<h5 style="margin-top: -18px; font-weight: bold;">Input: Raw Data Schemas</h5>
-												<select id="exampleSelect" onchange="xsdLoadExample(this.value)">
+												<h5 style="font-weight: bold;">Input: Raw Data Schemas</h5>
+												<select style="margin-top: -5px" id="exampleSelect" onchange="xsdLoadExample(this.value)">
 													<option value="">Select an example...</option>
 													<option value="student.xsd.xml">Student</option>
 													<option value="rinf.xsd.xml">RINF</option>
 												</select>
 											</div>
-											<textarea id="xsdText" type="text" placeholder="XML Schemas" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
+											<textarea id="xsdText" type="text" placeholder="XML Schemas" style="width: 100%; height: 260px; margin-top: -5px; color: black; font-size: 13px;"></textarea>
 											<div style="display: flex; align-items: center; justify-content: space-between">	
 												<input type="file" id="xsdTextFile" accept=".txt,.xml,.xsd" onchange="handleFileUpload(this)" multiple>
 												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('xsdText')">Clear</button>
@@ -63,14 +63,15 @@
 
 										<div style="flex: 1; margin-right: 10px;">
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<h5 style="margin-top: -18px; margin-right: 65px;  font-weight: bold;">Input: Mapping Rules</h5>
-												<select id="exampleSelect" onchange="rmlLoadExample(this.value)">
+												<h5 style="margin-right: 65px;  font-weight: bold;">Input: Mapping Rules</h5>
+												<select style="margin-top: -5px;" id="exampleSelect" onchange="rmlLoadExample(this.value)">
 													<option value="">Select an example...</option>
 													<option value="student.rml.ttl">Student</option>
+													<option value="student.v2.rml.ttl">Student_v2</option>
 													<option value="rinf.rml.ttl">RINF</option>
 												</select>
 											</div>
-											<textarea id="rmlText" placeholder="RML Mapping Rules" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
+											<textarea id="rmlText" placeholder="RML Mapping Rules" style="width: 100%; height: 260px; margin-top: -5px; color: black; font-size: 13px;"></textarea>
 											<div style="display: flex; align-items: center; justify-content: space-between">
 												<input type="file" id="rmlTextFile" accept=".txt,.ttl" onchange="handleFileUpload(this)" multiple>
 												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('rmlText')">Clear</button>
@@ -79,14 +80,14 @@
 
 										<div style="flex: 1; margin-right: 10px;">
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<h5 style="margin-top: -18px; font-weight: bold;">Input: Ontologies</h5>
-												<select id="exampleSelect" onchange="owlLoadExample(this.value)">
+												<h5 style="font-weight: bold;">Input: Ontologies</h5>
+												<select style="margin-top: -5px" id="exampleSelect" onchange="owlLoadExample(this.value)">
 													<option value="">Select an example...</option>
 													<option value="student.ontology.ttl">Student</option>
 													<option value="rinf.ontology.ttl">RINF</option>
 												</select>
 											</div>
-											<textarea id="owlText" placeholder="OWL" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
+											<textarea id="owlText" placeholder="OWL" style="width: 100%; height: 260px; margin-top: -5px; color: black; font-size: 13px;"></textarea>
 											<div style="display: flex; align-items: center; justify-content: space-between">
 												<input type="file" id="owlTextFile" accept=".txt,.ttl,.owl,.nt" onchange="handleFileUpload(this)" multiple>
 												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('owlText')">Clear</button>
@@ -96,7 +97,7 @@
 
 									<div style="margin-top: 20px;">
 										<h5 style="margin-top: -12px; font-weight: bold;">Output: SHACL Shapes</h5>
-										<textarea id="shaclOutput" placeholder="Integrated SHACL Shapes" style="width: 99.2%; height: 200px; margin-top: -5px; white-space: pre-wrap;"></textarea>
+										<textarea id="shaclOutput" placeholder="Integrated SHACL Shapes" style="width: 99.2%; height: 200px; margin-top: -5px; white-space: pre-wrap; color: black; font-size: 13px;"></textarea>
 									</div>
 									<button style="float: right; margin-right: 0.8%; padding-bottom: 2.2em; font-size: 0.6em; width: 6.6%; height: 1em;" onclick="downloadShaclOutput('shaclOutput')">Download</button>
 
@@ -164,14 +165,15 @@
 									<div style="display: flex; flex-wrap: wrap;">
 										<div style="flex: 1; margin-right: 10px;">
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<h5 style="margin-top: -18px; font-weight: bold;">Input: SHACL Shapes</h5>
-												<select id="exampleSelect" onchange="shacl1LoadExample(this.value)">
+												<h5 style="font-weight: bold;">Input: SHACL Shapes (High Priority)</h5>
+												<select style="margin-top: -5px" id="exampleSelect" onchange="shacl1LoadExample(this.value)">
 													<option value="">Select an example...</option>
 													<option value="shape1.ttl">shape1.ttl</option>
+													<option value="shape2.ttl">shape2.ttl</option>
 													<!-- Add more options for other examples if needed -->
 												</select>
 											</div>
-											<textarea id="shacl1Text" type="text" placeholder="SHACL shapes" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
+											<textarea id="shacl1Text" type="text" placeholder="SHACL shapes" style="width: 100%; height: 260px; margin-top: -5px; color: black; font-size: 13px;"></textarea>
 											<div style="display: flex; align-items: center; justify-content: space-between">
 												<input type="file" id="shacl1TextFile" accept=".txt,.ttl,.nt" onchange="handleFileUpload(this)">
 												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('shacl1Text')">Clear</button>
@@ -180,14 +182,15 @@
 									
 										<div style="flex: 1; margin-right: 10px;">
 											<div style="display: flex; align-items: center; justify-content: space-between">
-												<h5 style="margin-top: -18px; font-weight: bold;">Input: SHACL Shapes</h5>
-												<select id="exampleSelect" onchange="shacl2LoadExample(this.value)">
+												<h5 style="font-weight: bold;">Input: SHACL Shapes (Low Priority)</h5>
+												<select style="margin-top: -5px" id="exampleSelect" onchange="shacl2LoadExample(this.value)">
 													<option value="">Select an example...</option>
 													<option value="shape2.ttl">shape2.ttl</option>
+													<option value="shape1.ttl">shape1.ttl</option>
 													<!-- Add more options for other examples if needed -->
 												</select>
 											</div>
-											<textarea id="shacl2Text" type="text" placeholder="SHACL shapes" style="width: 100%; height: 260px; margin-top: -5px;"></textarea>
+											<textarea id="shacl2Text" type="text" placeholder="SHACL shapes" style="width: 100%; height: 260px; margin-top: -5px; color: black; font-size: 13px;"></textarea>
 											<div style="display: flex; align-items: center; justify-content: space-between">
 												<input type="file" id="shacl2TextFile" accept=".txt,.ttl,.nt" onchange="handleFileUpload(this)">
 												<button style="padding-bottom: 2.2em; font-size: 0.6em; width: 15%; height: 1em;" id="clearButton" onclick="clearTextArea('shacl1Text')">Clear</button>
@@ -197,7 +200,7 @@
 									
 									<div style="flex: 1; margin-top: 20px;">
 										<h5 style="margin-top: -12px; font-weight: bold;">Output: SHACL Shapes</h5>
-										<textarea id="shaclOutput_integ" placeholder="Integrated SHACL Shapes" style="width: 99.2%; height: 200px; margin-top: -5px; white-space: pre-wrap;"></textarea>
+										<textarea id="shaclOutput_integ" placeholder="Integrated SHACL Shapes" style="width: 99.2%; height: 200px; margin-top: -5px; white-space: pre-wrap; color: black; font-size: 13px;"></textarea>
 									</div>
 									<button style="float: right; margin-right: 0.8%; padding-bottom: 2.2em; font-size: 0.6em; width: 6.6%; height: 1em;" onclick="downloadShaclOutput('shaclOutput_integ')">Download</button>
 
