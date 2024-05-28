@@ -233,7 +233,6 @@ class ShapeIntegrationAll():
             else:  
                 self.SHACL.add((bn0, constraint_add, constraints_current.get(constraint_add)))
                 self.SHACL.add((bn1, constraint_add, constraint_add_value))
-                print(self.constraints_add)
                 if self.constraints_add.get(self.shaclNS["class"], None) != None:
                     self.SHACL.add((bn1, self.shaclNS["class"], self.constraints_add.get(self.shaclNS["class"])))
                 self.SHACL.remove((identifier_path_current, constraint_add, constraints_current.get(constraint_add)))
