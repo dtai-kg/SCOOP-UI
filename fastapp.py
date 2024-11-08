@@ -104,6 +104,7 @@ async def translate(request_data: TranslationRequest):
         if request_data.xsdData!=[]:
             for index, data in enumerate(request_data.xsdData):
                 xsd_file = os.path.join(inputxsd_folder, f"xsd{index}.xsd")  
+                open(xsd_file, 'w', encoding='utf-8').write(data)
             args.extend(['-x', inputxsd_folder])
         main(args)
         output = rdflib.Graph().parse(output_file, format="turtle")
