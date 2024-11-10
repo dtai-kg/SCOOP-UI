@@ -144,7 +144,8 @@ def extract_preliminary_shapes(args):
             owl_files = []
             for owl in args.ontology:
                 if os.path.isdir(owl):
-                    owl_files.extend([os.path.join(owl, f) for f in os.listdir(owl) if f.endswith('.owl') or f.endswith('.ttl') or f.endswith('.rdf') or f.endswith('.txt')])
+                    # owl_files.extend([os.path.join(owl, f) for f in os.listdir(owl) if f.endswith('.owl') or f.endswith('.ttl') or f.endswith('.rdf') or f.endswith('.txt')])
+                    owl_files.extend([os.path.join(owl, f) for f in os.listdir(owl)])
                 else:
                     owl_files.append(owl)
             owl_shacl_files = extract_shape_ontology(owl_files,tempshacl_folder)
