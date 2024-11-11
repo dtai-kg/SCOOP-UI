@@ -16,7 +16,7 @@ from rdflib import Graph
 from pyshacl import validate
 import multiprocessing as mp
 from scoop.main import main
-from scoop.ontology_format_detection import get_ontology_format
+from scoop.rdf_graph_load import load_rdf_graph
 
 from scoop.SCOOP.shape_integration_priority import ShapeIntegrationPriority
 from scoop.SCOOP.shape_integration_priority_r import ShapeIntegrationPriorityR
@@ -94,22 +94,31 @@ async def translate(request_data: TranslationRequest):
 
         if request_data.rmlData!=[]:
             for index, data in enumerate(request_data.rmlData):
-                rml_file = os.path.join(inputrml_folder, f"rml{index}.ttl")
-                rdflib.Graph().parse(data=data, format="turtle").serialize(destination=rml_file, format="turtle")
+                g, rdf_format = load_rdf_graph(data)
+                if rdf_format:
+                    rml_file = os.path.join(inputrml_folder, f"rml{index}.ttl")
+                    g.serialize(destination=rml_file, format='ttl')
+                else:
+                    # unrecognized format
+                    return JSONResponse(content={"error": "Invalid RML format"}, status_code=400)
             args.extend(['-m', inputrml_folder, '-xr', inputrml_folder])
-        # if request_data.owlData!=[]:
-        #     for index, data in enumerate(request_data.owlData):
-        #         owl_file = os.path.join(inputowl_folder, f"owl{index}.txt")
-        #         open(owl_file, 'w', encoding='utf-8').write(data)
-        #     args.extend(['-o', inputowl_folder])
+        
         if request_data.owlData != []:
             for index, data in enumerate(request_data.owlData):
-                rdf_format = get_ontology_format(data)
-                print("HERE",rdf_format)
-                owl_file = os.path.join(inputowl_folder, f"owl{index}.{rdf_format}")
-                with open(owl_file, 'w', encoding='utf-8') as f:
-                    f.write(data)
+                print("Start loading ontology")
+                g, rdf_format = load_rdf_graph(data)
+                print(f"Detected RDF format: {rdf_format}")
+                if rdf_format:
+                    print("Here")
+                    owl_file = os.path.join(inputowl_folder, f"owl{index}.ttl")
+                    print(f"OWL file: {owl_file}")
+                    g.serialize(destination=owl_file, format='ttl')
+                    print("Ontology loaded")
+                else:
+                    # unrecognized format
+                    return JSONResponse(content={"error": "Invalid Ontology format"}, status_code=400)
                 args.extend(['-o', inputowl_folder])
+        
         if request_data.xsdData!=[]:
             for index, data in enumerate(request_data.xsdData):
                 xsd_file = os.path.join(inputxsd_folder, f"xsd{index}.xsd")  
