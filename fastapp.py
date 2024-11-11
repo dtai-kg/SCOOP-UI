@@ -105,15 +105,10 @@ async def translate(request_data: TranslationRequest):
         
         if request_data.owlData != []:
             for index, data in enumerate(request_data.owlData):
-                print("Start loading ontology")
                 g, rdf_format = load_rdf_graph(data)
-                print(f"Detected RDF format: {rdf_format}")
                 if rdf_format:
-                    print("Here")
                     owl_file = os.path.join(inputowl_folder, f"owl{index}.ttl")
-                    print(f"OWL file: {owl_file}")
                     g.serialize(destination=owl_file, format='ttl')
-                    print("Ontology loaded")
                 else:
                     # unrecognized format
                     return JSONResponse(content={"error": "Invalid Ontology format"}, status_code=400)
